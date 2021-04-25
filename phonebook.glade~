@@ -35,18 +35,13 @@
                 <property name="homogeneous">True</property>
                 <child>
                   <object class="GtkButton" id="button_add">
+                    <property name="label">gtk-add</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="use_stock">True</property>
                     <property name="always_show_image">True</property>
                     <signal name="clicked" handler="on_button_add_clicked" swapped="no"/>
-                    <child>
-                      <object class="GtkImage" id="button-create">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="pixbuf">icon-png/icon-create.png</property>
-                      </object>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -56,18 +51,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button_update">
+                  <object class="GtkButton" id="button_find">
+                    <property name="label">gtk-find</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="use_stock">True</property>
                     <property name="always_show_image">True</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="pixbuf">icon-png/icon-update.png</property>
-                      </object>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -77,18 +67,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button_read">
+                  <object class="GtkButton" id="button_refresh">
+                    <property name="label">gtk-edit</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="use_stock">True</property>
                     <property name="always_show_image">True</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="pixbuf">icon-png/icon-read.png</property>
-                      </object>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -102,17 +87,12 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="button_delete">
+                    <property name="label">gtk-delete</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="use_stock">True</property>
                     <property name="always_show_image">True</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="pixbuf">icon-png/icon-delete.png</property>
-                      </object>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
