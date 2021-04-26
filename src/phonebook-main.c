@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <gtk/gtk.h>
 
 //declare widget
@@ -19,9 +20,9 @@ GtkCellRenderer	*cr2;
 
 
 //handle signal
-void on_button_add_clicked (GtkButton *b) {
-	printf ("hello\n");
-	gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Hello world");
+void on_button_create_clicked (GtkButton *b) {
+	printf ("handle_create\n");
+	gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Handle btn create");
 }
 
 void on_selection1_changed(GtkWidget *c){
@@ -45,7 +46,7 @@ void on_search1_search_changed(GtkSearchEntry *s) {
 
 	GtkTreeModel *model = gtk_tree_view_get_model(treeview1);
 
-	srch = gtk_entry_get_text(s);
+	srch = gtk_entry_get_text((GtkEntry *)s);
 
 	if(strlen(srch) == 0) return;
 
@@ -68,7 +69,7 @@ int main(int argc, char *argv[]) {
   	gtk_init(&argc, &argv);
 
   	//.glade file
-	builder = gtk_builder_new_from_file("../phonebook.glade");
+	builder = gtk_builder_new_from_file("../list_view.glade");
 	gtk_builder_connect_signals(builder, NULL);		//CONNECT SIGNAL FROM .GLADE FILE
 
 	//window
@@ -90,8 +91,8 @@ int main(int argc, char *argv[]) {
 
 
 	// attach the renderer to the column
-	gtk_tree_view_column_add_attribute(column1, cr1, "text", 0);
-	gtk_tree_view_column_add_attribute(column2, cr2, "text", 1);
+	gtk_tree_view_column_add_attribute(column1, cr1, "text", (gint)0);
+	gtk_tree_view_column_add_attribute(column2, cr2, "text", (gint)1);
 
 	//iterators
 	GtkTreeIter iter;
@@ -99,28 +100,28 @@ int main(int argc, char *argv[]) {
 	GtkTreeIter iterChild2;
 
 	//add row
-	// gtk_tree_store_append(treestore1, &iter, NULL);
-	// gtk_tree_store_set(treestore1, &iter, 0,"row1", -1);
-	// gtk_tree_store_set(treestore1, &iter, 1,"row1 data", -1);
+	gtk_tree_store_append(treestore1, &iter, NULL);
+	gtk_tree_store_set(treestore1, &iter, 0,"row1", -1);
+	gtk_tree_store_set(treestore1, &iter, 1,"row1 data", -1);
 
-	// gtk_tree_store_append(treestore1, &iterChild1, &iter);
-	// gtk_tree_store_set(treestore1, &iterChild1, 0,"row1child", -1);
-	// gtk_tree_store_set(treestore1, &iterChild1, 1,"row1 data", -1);
+	gtk_tree_store_append(treestore1, &iterChild1, &iter);
+	gtk_tree_store_set(treestore1, &iterChild1, 0,"row1child", -1);
+	gtk_tree_store_set(treestore1, &iterChild1, 1,"row1 data", -1);
 
-	// gtk_tree_store_append(treestore1, &iter, NULL);
-	// gtk_tree_store_set(treestore1, &iter, 0,"row2", -1);
-	// gtk_tree_store_set(treestore1, &iter, 1,"row2 data", -1);
+	gtk_tree_store_append(treestore1, &iter, NULL);
+	gtk_tree_store_set(treestore1, &iter, 0,"row2", -1);
+	gtk_tree_store_set(treestore1, &iter, 1,"row2 data", -1);
 
-	// gtk_tree_store_append(treestore1, &iterChild2, &iter);
-	// gtk_tree_store_set(treestore1, &iterChild2, 0,"row2child", -1);
-	// gtk_tree_store_set(treestore1, &iterChild2, 1,"row2child data", -1);
+	gtk_tree_store_append(treestore1, &iterChild2, &iter);
+	gtk_tree_store_set(treestore1, &iterChild2, 0,"row2child", -1);
+	gtk_tree_store_set(treestore1, &iterChild2, 1,"row2child data", -1);
 
 //fix:
-	for(int i = 0; i < 10; i++) {
-		gtk_tree_store_append(treestore1, &iter, NULL);
-		gtk_tree_store_set(treestore1, &iter, 0, "hello", -1);
-		gtk_tree_store_set(treestore1, &iter, 1, "world", -1);
-	}
+	// for(int i = 0; i < 10; i++) {
+	// 	gtk_tree_store_append(treestore1, &iter, NULL);
+	// 	gtk_tree_store_set(treestore1, &iter, 0, "hello", -1);
+	// 	gtk_tree_store_set(treestore1, &iter, 1, "world", -1);
+	// }
 //
 	selection1 = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview1));
 

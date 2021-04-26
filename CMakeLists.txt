@@ -14,3 +14,6 @@ message(STATUS "Include: ${GTK3_INCLUDE_DIRS}\n LIB_DIR: ${GTK3_LIBRARY_DIRS} \n
 
 add_executable(phonebook src/phonebook-main.c)
 target_link_libraries(phonebook ${GTK3_LIBRARIES})
+
+add_executable(gtk-test src/gtk-test.c)
+target_link_libraries(gtk-test ${GTK3_LIBRARIES})
