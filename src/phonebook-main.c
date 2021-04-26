@@ -18,6 +18,10 @@ GtkTreeSelection	*selection1;
 GtkCellRenderer	*cr1;
 GtkCellRenderer	*cr2;
 
+GtkTreeModelFilter *filtered;
+GtkTreeModelSort *sorted;
+
+
 
 //handle signal
 void on_button_create_clicked (GtkButton *b) {
@@ -40,6 +44,24 @@ void on_selection1_changed(GtkWidget *c){
 }
 
 //search
+// void on_search1_search_changed(GtkSearchEntry *s) {
+// 	const gchar *srch;
+// 	GtkTreeIter iter;
+
+// 	GtkTreeModel *model = gtk_tree_view_get_model(treeview1);
+
+// 	srch = gtk_entry_get_text((GtkEntry *)s);
+
+// 	if(strlen(srch) == 0){
+// 		gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "");
+// 	 	return;
+// 	}
+// 	gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) srch);
+
+// 	// printf("\n", );
+// }
+
+
 void on_search1_search_changed(GtkSearchEntry *s) {
 	const gchar *srch;
 	GtkTreeIter iter;
@@ -48,10 +70,11 @@ void on_search1_search_changed(GtkSearchEntry *s) {
 
 	srch = gtk_entry_get_text((GtkEntry *)s);
 
-	if(strlen(srch) == 0) return;
+	gtk_tree_model_filter_refilter (filtered);
 
-	// printf("\n", );
 }
+
+
 
 void on_treeview1_start_interactive_search(GtkTreeView *t) {
 	printf("interactive_search\n");
@@ -60,6 +83,48 @@ void on_treeview1_start_interactive_search(GtkTreeView *t) {
 gboolean on_treeview1_key_press_event(GtkTreeView *t) {
 	printf("on_treeview1_key_press_event\n");
 	return FALSE;
+}
+
+//filter
+static gboolean
+row_visible (GtkTreeModel *model,
+             GtkTreeIter *iter)
+{
+    gchar* value;
+    gchar* str = "a";
+
+    gtk_tree_model_get (model, iter, 0, &value, -1);
+
+    return strstr(value, str) ? 1 : 0;
+}
+
+static void
+on_row_activated (GtkTreeView *view,
+                  GtkTreePath *path,
+                  GtkTreeViewColumn *col)
+{
+    GtkTreeIter iter;
+    GtkTreePath *filtered_path;
+    GtkTreePath *child_path;
+
+    filtered_path = gtk_tree_model_sort_convert_path_to_child_path (GTK_TREE_MODEL_SORT (sorted),
+                                                                    path);
+
+    child_path = gtk_tree_model_filter_convert_path_to_child_path (GTK_TREE_MODEL_FILTER (filtered),
+                                                                   filtered_path);
+
+    if (gtk_tree_model_get_iter (GTK_TREE_MODEL (column1), &iter, child_path)) {
+        gchar *article;
+        gdouble price;
+
+        gtk_tree_model_get (GTK_TREE_MODEL (column1), &iter,
+                            column1, &article,
+                            column2, &price,
+                            -1);
+
+        g_print ("You want to buy %s for %f?\n", article, price);
+        g_free (article);
+    }
 }
 
 //-----------------main--------------------------
@@ -88,6 +153,12 @@ int main(int argc, char *argv[]) {
 	cr1 = GTK_CELL_RENDERER(gtk_builder_get_object(builder, "cr1"));
 	cr2 = GTK_CELL_RENDERER(gtk_builder_get_object(builder, "cr2"));
 	selection1 = GTK_TREE_SELECTION(gtk_builder_get_object(builder, "selection1"));
+	filtered = GTK_TREE_MODEL_FILTER(gtk_builder_get_object(builder, "filter1"));
+    sorted = GTK_TREE_MODEL_SORT(gtk_builder_get_object (builder, "sort1"));
+//filter
+    gtk_tree_model_filter_set_visible_func (filtered,
+                                            (GtkTreeModelFilterVisibleFunc) row_visible,
+                                            NULL, NULL);
 
 
 	// attach the renderer to the column

@@ -17,3 +17,6 @@ target_link_libraries(phonebook ${GTK3_LIBRARIES})
 
 add_executable(gtk-test src/gtk-test.c)
 target_link_libraries(gtk-test ${GTK3_LIBRARIES})
+
+add_executable(sorted-filted src/sorted-filted.c)
+target_link_libraries(sorted-filted ${GTK3_LIBRARIES})
