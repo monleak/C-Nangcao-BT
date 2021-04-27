@@ -2,24 +2,34 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
-  <object class="GtkTreeStore" id="treestore1">
+  <object class="GtkListStore" id="liststore1">
     <columns>
-      <!-- column-name Name -->
+      <!-- column-name Tên -->
       <column type="gchararray"/>
-      <!-- column-name MSSV -->
+      <!-- column-name Số -->
       <column type="gchararray"/>
     </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">a</col>
+        <col id="1" translatable="yes">b</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">c</col>
+        <col id="1" translatable="yes">d</col>
+      </row>
+    </data>
   </object>
   <object class="GtkTreeModelFilter" id="filter1">
-    <property name="child-model">treestore1</property>
+    <property name="child-model">liststore1</property>
   </object>
   <object class="GtkTreeModelSort" id="sort1">
-    <property name="model">treestore1</property>
+    <property name="model">filter1</property>
   </object>
   <object class="GtkApplicationWindow" id="window1">
     <property name="can-focus">False</property>
-    <property name="default-width">440</property>
-    <property name="default-height">250</property>
+    <property name="default-width">600</property>
+    <property name="default-height">400</property>
     <child>
       <object class="GtkRevealer">
         <property name="visible">True</property>
@@ -44,7 +54,6 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
                     <property name="always-show-image">True</property>
-                    <signal name="clicked" handler="on_button_create_clicked" swapped="no"/>
                     <child>
                       <object class="GtkImage">
                         <property name="visible">True</property>
@@ -147,6 +156,8 @@
                   <object class="GtkSearchEntry" id="search1">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="margin-left">75</property>
+                    <property name="margin-right">75</property>
                     <property name="margin-start">75</property>
                     <property name="margin-end">75</property>
                     <property name="margin-bottom">5</property>
@@ -172,18 +183,17 @@
                   <object class="GtkTreeView" id="treeview1">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="model">treestore1</property>
+                    <property name="model">sort1</property>
                     <property name="search-column">0</property>
                     <property name="level-indentation">5</property>
-                    <signal name="key-press-event" handler="on_treeview1_key_press_event" swapped="no"/>
-                    <signal name="start-interactive-search" handler="on_treeview1_start_interactive_search" swapped="no"/>
                     <child internal-child="selection">
-                      <object class="GtkTreeSelection">
+                      <object class="GtkTreeSelection" id="selection1">
                         <signal name="changed" handler="on_selection1_changed" swapped="no"/>
                       </object>
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="column1">
+                        <property name="min-width">150</property>
                         <property name="title" translatable="yes">Tên</property>
                         <property name="clickable">True</property>
                         <property name="sort-column-id">0</property>
@@ -196,6 +206,7 @@
                       <object class="GtkTreeViewColumn" id="column2">
                         <property name="title" translatable="yes">Số điện thoại</property>
                         <property name="clickable">True</property>
+                        <property name="sort-indicator">True</property>
                         <property name="sort-column-id">1</property>
                         <child>
                           <object class="GtkCellRendererText" id="cr2"/>

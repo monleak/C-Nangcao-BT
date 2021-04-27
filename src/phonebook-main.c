@@ -21,7 +21,7 @@ GtkCellRenderer	*cr2;
 GtkTreeModelFilter *filtered;
 GtkTreeModelSort *sorted;
 
-
+	gchar *searchValue = NULL;
 
 //handle signal
 void on_button_create_clicked (GtkButton *b) {
@@ -30,7 +30,6 @@ void on_button_create_clicked (GtkButton *b) {
 }
 
 void on_selection1_changed(GtkWidget *c){
-	gchar *value;
 	GtkTreeIter iter;
 	GtkTreeModel *model;
 
@@ -38,9 +37,9 @@ void on_selection1_changed(GtkWidget *c){
 		GTK_TREE_SELECTION(c), &model, &iter) == FALSE)
 		return;
 
-	gtk_tree_model_get(model, &iter, 0, &value, -1);
-	gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) value);
-	printf("SELECTED: %s\n", value);
+	gtk_tree_model_get(model, &iter, 0, &searchValue, -1);
+	gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) searchValue);
+	printf("SELECTED: %s\n", searchValue);
 }
 
 //search
@@ -70,6 +69,12 @@ void on_search1_search_changed(GtkSearchEntry *s) {
 
 	srch = gtk_entry_get_text((GtkEntry *)s);
 
+	if(strlen(srch) == 0){
+		gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "");
+	 	return;
+	}
+	gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) srch);
+
 	gtk_tree_model_filter_refilter (filtered);
 
 }
@@ -95,7 +100,7 @@ row_visible (GtkTreeModel *model,
 
     gtk_tree_model_get (model, iter, 0, &value, -1);
 
-    return strstr(value, str) ? 1 : 0;
+    return strstr(value, searchValue) ? 1 : 0;
 }
 
 static void
@@ -106,6 +111,7 @@ on_row_activated (GtkTreeView *view,
     GtkTreeIter iter;
     GtkTreePath *filtered_path;
     GtkTreePath *child_path;
+    GtkTreeModel *model;
 
     filtered_path = gtk_tree_model_sort_convert_path_to_child_path (GTK_TREE_MODEL_SORT (sorted),
                                                                     path);
@@ -113,17 +119,15 @@ on_row_activated (GtkTreeView *view,
     child_path = gtk_tree_model_filter_convert_path_to_child_path (GTK_TREE_MODEL_FILTER (filtered),
                                                                    filtered_path);
 
-    if (gtk_tree_model_get_iter (GTK_TREE_MODEL (column1), &iter, child_path)) {
-        gchar *article;
-        gdouble price;
+    if (gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, child_path)) {
+        gchar *name;
+        gchar *number;
 
-        gtk_tree_model_get (GTK_TREE_MODEL (column1), &iter,
-                            column1, &article,
-                            column2, &price,
+        gtk_tree_model_get (GTK_TREE_MODEL (model), &iter,
+                            0, &name,
+                            1, &number,
                             -1);
 
-        g_print ("You want to buy %s for %f?\n", article, price);
-        g_free (article);
     }
 }
 
@@ -156,6 +160,9 @@ int main(int argc, char *argv[]) {
 	filtered = GTK_TREE_MODEL_FILTER(gtk_builder_get_object(builder, "filter1"));
     sorted = GTK_TREE_MODEL_SORT(gtk_builder_get_object (builder, "sort1"));
 //filter
+	// filtered = GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (GTK_TREE_MODEL (treestore1), NULL));
+    // sorted = GTK_TREE_MODEL_SORT (gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (filtered)));
+
     gtk_tree_model_filter_set_visible_func (filtered,
                                             (GtkTreeModelFilterVisibleFunc) row_visible,
                                             NULL, NULL);
@@ -170,29 +177,35 @@ int main(int argc, char *argv[]) {
 	GtkTreeIter iterChild1;
 	GtkTreeIter iterChild2;
 
-	//add row
-	gtk_tree_store_append(treestore1, &iter, NULL);
-	gtk_tree_store_set(treestore1, &iter, 0,"row1", -1);
-	gtk_tree_store_set(treestore1, &iter, 1,"row1 data", -1);
+	// //add row
+	// gtk_tree_store_append(treestore1, &iter, NULL);
+	// gtk_tree_store_set(treestore1, &iter, 0,"row1", -1);
+	// gtk_tree_store_set(treestore1, &iter, 1,"row1 data", -1);
 
-	gtk_tree_store_append(treestore1, &iterChild1, &iter);
-	gtk_tree_store_set(treestore1, &iterChild1, 0,"row1child", -1);
-	gtk_tree_store_set(treestore1, &iterChild1, 1,"row1 data", -1);
+	// gtk_tree_store_append(treestore1, &iterChild1, &iter);
+	// gtk_tree_store_set(treestore1, &iterChild1, 0,"row1child", -1);
+	// gtk_tree_store_set(treestore1, &iterChild1, 1,"row1 data", -1);
 
-	gtk_tree_store_append(treestore1, &iter, NULL);
-	gtk_tree_store_set(treestore1, &iter, 0,"row2", -1);
-	gtk_tree_store_set(treestore1, &iter, 1,"row2 data", -1);
+	// gtk_tree_store_append(treestore1, &iter, NULL);
+	// gtk_tree_store_set(treestore1, &iter, 0,"row2", -1);
+	// gtk_tree_store_set(treestore1, &iter, 1,"row2 data", -1);
 
-	gtk_tree_store_append(treestore1, &iterChild2, &iter);
-	gtk_tree_store_set(treestore1, &iterChild2, 0,"row2child", -1);
-	gtk_tree_store_set(treestore1, &iterChild2, 1,"row2child data", -1);
+	// gtk_tree_store_append(treestore1, &iterChild2, &iter);
+	// gtk_tree_store_set(treestore1, &iterChild2, 0,"row2child", -1);
+	// gtk_tree_store_set(treestore1, &iterChild2, 1,"row2child data", -1);
 
 //fix:
-	// for(int i = 0; i < 10; i++) {
-	// 	gtk_tree_store_append(treestore1, &iter, NULL);
-	// 	gtk_tree_store_set(treestore1, &iter, 0, "hello", -1);
-	// 	gtk_tree_store_set(treestore1, &iter, 1, "world", -1);
-	// }
+	for(int i = 0; i < 10; i++) {
+		char *a = calloc( 10, sizeof(char));
+		char b[2];
+		b[0] = i+'a';
+		b[1] = '\0';
+		strcpy(a, "hello");
+		strcat(a, b);
+		gtk_tree_store_append(treestore1, &iter, NULL);
+		gtk_tree_store_set(treestore1, &iter, 0, a, -1);
+		gtk_tree_store_set(treestore1, &iter, 1, "world", -1);
+	}
 //
 	selection1 = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview1));
 
