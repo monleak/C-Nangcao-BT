@@ -13,6 +13,10 @@ extern int insert_bind(char name[], char number[]);
 
 extern contacts* select_bind();
 
+extern int get_list_size_after_select();
+
+extern void printContactsList(contacts *list, int list_size);
+
 // UPDATE num=value WHERE id=des;
 extern void update_bind(char value[], char des[]);
 

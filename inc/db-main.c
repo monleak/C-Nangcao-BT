@@ -36,7 +36,7 @@ static const char create_sql[] = 	"CREATE TABLE "
 
 static const char insert_sql[] = 	"INSERT INTO "
 							tablename
-							" (id, name, num) VALUES (NULL,?,?)";
+							" (name, num) VALUES (?,?)";
 
 static const char select_sql[] = 	"SELECT * FROM "
 							tablename;
@@ -141,6 +141,8 @@ extern int insert_bind(char name[], char number[]) {
 		printf("INSERT completed\n\n");
 	}
 
+	sqlite3_reset(insert_stmt);
+
 	return rc;
 }
 
@@ -169,13 +171,19 @@ extern contacts* select_bind() {
     } else {
         printf("SELECT success\n");
     }
+    printf("after_select\n");
+    printContactsList(list, list_size);
     return list;
 }
 
-static void printContactsList() {
+extern void printContactsList(contacts *list, int list_size) {
 	for(int i = 0; i < list_size; i++) {
 		printf("%d, %s, %s \n", list[i].id, list[i].name, list[i].number);
 	}
+}
+
+extern int get_list_size_after_select(){
+	return list_size;
 }
 
 // UPDATE colName=value WHERE place=des;
@@ -258,18 +266,18 @@ extern void DB_FREE_LIST() {
 	free(list);
 }
 
-int main() {
-	//test
-	DB_INIT();	
+// int main() {
+// 	//test
+// 	DB_INIT();	
 
-	insert_bind("a", "b");
-	select_bind();
-	printContactsList();
-	delete_bind("54");
-	select_bind();
-	printContactsList();
+// 	insert_bind("a", "b");
+// 	select_bind();
+// 	printContactsList(list, list_size);
+// 	delete_bind("54");
+// 	select_bind();
+// 	printContactsList(list, list_size);
 
-	DB_CLOSE();
-	DB_FREE_LIST();
-	return 0;
-}
+// 	DB_CLOSE();
+// 	DB_FREE_LIST();
+// 	return 0;
+// }

@@ -9,16 +9,6 @@
       <!-- column-name Số -->
       <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">a</col>
-        <col id="1" translatable="yes">b</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">c</col>
-        <col id="1" translatable="yes">d</col>
-      </row>
-    </data>
   </object>
   <object class="GtkTreeModelFilter" id="filter1">
     <property name="child-model">liststore1</property>
@@ -248,7 +238,6 @@
     <property name="urgency-hint">True</property>
     <property name="attached-to">window1</property>
     <property name="startup-id">2</property>
-    <signal name="delete-event" handler="on_window2_delete_event" swapped="no"/>
     <signal name="destroy-event" handler="on_window2_destroy_event" swapped="no"/>
     <child>
       <object class="GtkBox">

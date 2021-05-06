@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../sqlite/sqlite3.h
+stdarg.h
+-
+
+/home/kryo/Desktop/C-Nangcao-BT/inc/db-main.c
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+sqlite3.h
+/home/kryo/Desktop/C-Nangcao-BT/inc/sqlite3.h
+./db-main.h
+/home/kryo/Desktop/C-Nangcao-BT/inc/db-main.h
+
+/home/kryo/Desktop/C-Nangcao-BT/inc/db-main.h
+
