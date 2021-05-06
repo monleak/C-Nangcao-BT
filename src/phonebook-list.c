@@ -22,12 +22,33 @@ GtkTreeModelSort *sorted;
 
 gchar *searchValue = "";
 
+GtkWidget   *window2;
 
-//==============================handle signal==============================
+//==============================add feature==============================
+void on_cacel_btn2_clicked() {
+    // gtk_container_remove(window2);
+     gtk_window_close(GTK_WINDOW(window2));
+    // gtk_widget_hide(window2);
+}
+
+gboolean on_window2_destroy_event(GtkWidget *widget,
+                                GdkEvent  *event,
+                                gpointer   user_data) {
+
+    return TRUE;
+}
+
+
 void on_button_create_clicked (GtkButton *b) {
     printf ("handle_create\n");
     gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Handle btn create");
+
+    if(window2)
+        gtk_widget_show_all(window2);
 }
+
+//==============================handle signal==============================
+
 
 void on_selection1_changed(GtkWidget *c){
     gchar *value;
@@ -139,6 +160,10 @@ int main(int argc, char *argv[]) {
     selection1 = GTK_TREE_SELECTION(gtk_builder_get_object(builder, "selection1"));
     filtered = GTK_TREE_MODEL_FILTER(gtk_builder_get_object(builder, "filter1"));
     sorted = GTK_TREE_MODEL_SORT(gtk_builder_get_object(builder, "sort1"));
+
+    window2 = GTK_WIDGET(gtk_builder_get_object(builder, "window2"));
+    gtk_window_set_title (GTK_WINDOW (window2), "Add Contact");
+
 
     //set filter function
     gtk_tree_model_filter_set_visible_func (filtered,
