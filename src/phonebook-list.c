@@ -22,14 +22,16 @@ GtkTreeModelSort *sorted;
 
 gchar *searchValue = "";
 
-GtkWidget   *window2;
+GtkWidget   *addluachon;
+GtkWidget   *addfile;
+GtkWidget   *addthucong;
 
 //==============================add feature==============================
-void on_cacel_btn2_clicked() {
-    // gtk_container_remove(window2);
-     gtk_window_close(GTK_WINDOW(window2));
-    // gtk_widget_hide(window2);
-}
+// void on_cacel_btn2_clicked() {
+//     // gtk_container_remove(addluachon);
+//      gtk_window_close(GTK_WINDOW(addluachon));
+//     // gtk_widget_hide(addluachon);
+// }
 
 gboolean on_window2_destroy_event(GtkWidget *widget,
                                 GdkEvent  *event,
@@ -43,10 +45,29 @@ void on_button_create_clicked (GtkButton *b) {
     printf ("handle_create\n");
     gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Handle btn create");
 
-    if(window2)
-        gtk_widget_show_all(window2);
+    if(addluachon)
+        gtk_widget_show_all(addluachon);
 }
 
+void add_thucong (GtkButton *b) {
+    printf ("handle_create\n");
+    gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Handle btn create");
+
+    if(addthucong){
+        gtk_widget_show_all(addthucong);
+        gtk_window_close(GTK_WINDOW(addluachon));
+    }
+}
+
+void add_file (GtkButton *b) {
+    printf ("handle_create\n");
+    gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Handle btn create");
+
+    if(addfile){
+        gtk_widget_show_all(addfile);
+        gtk_window_close(GTK_WINDOW(addluachon));
+    }
+}
 //==============================handle signal==============================
 
 
@@ -143,7 +164,7 @@ int main(int argc, char *argv[]) {
     gtk_builder_connect_signals(builder, NULL);     //CONNECT SIGNAL FROM .GLADE FILE
 
     //window
-    window = GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
+    window = GTK_WIDGET(gtk_builder_get_object(builder, "main"));
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
     //widget
@@ -161,8 +182,14 @@ int main(int argc, char *argv[]) {
     filtered = GTK_TREE_MODEL_FILTER(gtk_builder_get_object(builder, "filter1"));
     sorted = GTK_TREE_MODEL_SORT(gtk_builder_get_object(builder, "sort1"));
 
-    window2 = GTK_WIDGET(gtk_builder_get_object(builder, "window2"));
-    gtk_window_set_title (GTK_WINDOW (window2), "Add Contact");
+    addluachon = GTK_WIDGET(gtk_builder_get_object(builder, "addluachon"));
+    gtk_window_set_title (GTK_WINDOW (addluachon), "Add Contact");
+
+    addthucong = GTK_WIDGET(gtk_builder_get_object(builder, "addthucong"));
+    gtk_window_set_title (GTK_WINDOW (addthucong), "Add Contact");
+
+    addfile = GTK_WIDGET(gtk_builder_get_object(builder, "addfile"));
+    gtk_window_set_title (GTK_WINDOW (addfile), "Add Contact");
 
 
     //set filter function
