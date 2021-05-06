@@ -1,0 +1,4 @@
+/home/kryo/Desktop/C-Nangcao-BT/inc/b/CMakeFiles/rebuild_cache.dir
+/home/kryo/Desktop/C-Nangcao-BT/inc/b/CMakeFiles/edit_cache.dir
+/home/kryo/Desktop/C-Nangcao-BT/inc/b/CMakeFiles/db-main.dir
+/home/kryo/Desktop/C-Nangcao-BT/inc/b/CMakeFiles/sqlite3.dir

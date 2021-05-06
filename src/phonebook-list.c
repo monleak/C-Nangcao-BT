@@ -3,9 +3,13 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
+#include "../inc/db-main.h"
+
 //==========declare widget==========
 GtkBuilder  *builder;
 GtkWidget   *window;
+GtkWidget   *button1;
+GtkWidget   *button1;
 GtkWidget   *button1;
 GtkWidget   *label1;
 GtkWidget   *view1;
@@ -26,12 +30,38 @@ GtkWidget   *addluachon;
 GtkWidget   *addfile;
 GtkWidget   *addthucong;
 
-//==============================add feature==============================
-// void on_cacel_btn2_clicked() {
-//     // gtk_container_remove(addluachon);
-//      gtk_window_close(GTK_WINDOW(addluachon));
-//     // gtk_widget_hide(addluachon);
-// }
+GtkWidget   *window2;
+GtkEntry   *entry1;
+GtkEntry   *entry2;
+
+//==============================feature: add==============================
+void on_cacel_btn2_clicked() {
+    // gtk_container_remove(window2);
+     // gtk_window_close(GTK_WINDOW(window2));
+    gtk_widget_hide(window2);
+}
+
+void on_ok_btn1_clicked() {
+    // if()
+    char *name = (char *)gtk_entry_get_text(entry1);
+    char *number = (char *)gtk_entry_get_text(entry2);
+    if(1) {
+        int success = insert_bind(name, number);
+        gtk_widget_hide(window2);
+        if(success) {
+            GtkTreeIter iter;
+
+            gtk_list_store_append (liststore1, &iter);
+            gtk_list_store_set (liststore1, &iter,
+                    0, name,
+                    1, number);
+        }
+    }
+    gtk_entry_set_text(entry1, "");
+    gtk_entry_set_text(entry2, "");
+    printf("%s\n", name);
+}
+
 
 gboolean on_window2_destroy_event(GtkWidget *widget,
                                 GdkEvent  *event,
@@ -182,6 +212,13 @@ int main(int argc, char *argv[]) {
     filtered = GTK_TREE_MODEL_FILTER(gtk_builder_get_object(builder, "filter1"));
     sorted = GTK_TREE_MODEL_SORT(gtk_builder_get_object(builder, "sort1"));
 
+
+    window2 = GTK_WIDGET(gtk_builder_get_object(builder, "window2"));
+    entry1 = GTK_ENTRY(gtk_builder_get_object(builder, "entry3"));
+    entry2 = GTK_ENTRY(gtk_builder_get_object(builder, "entry4"));
+    gtk_window_set_title (GTK_WINDOW (window2), "Add Contact");
+
+  //HIEU
     addluachon = GTK_WIDGET(gtk_builder_get_object(builder, "addluachon"));
     gtk_window_set_title (GTK_WINDOW (addluachon), "Add Contact");
 
@@ -190,6 +227,7 @@ int main(int argc, char *argv[]) {
 
     addfile = GTK_WIDGET(gtk_builder_get_object(builder, "addfile"));
     gtk_window_set_title (GTK_WINDOW (addfile), "Add Contact");
+
 
 
     //set filter function
@@ -207,24 +245,46 @@ int main(int argc, char *argv[]) {
     GtkTreeIter iter;
 
     //add mock data
-    for(int i = 0; i < 10; i++) {
-        char *a = calloc( 10, sizeof(char));
-        char b[2];
-        b[0] = i+'a';
-        b[1] = '\0';
-        strcpy(a, "hello");
-        strcat(a, b);
-        printf("%s\n", a);
+    // for(int i = 0; i < 10; i++) {
+    //     char *a = calloc( 10, sizeof(char));
+    //     char b[2];
+    //     b[0] = i+'a';
+    //     b[1] = '\0';
+    //     strcpy(a, "hello");
+    //     strcat(a, b);
+    //     printf("%s\n", a);
+    //   // Add a new row to the model
+    //   gtk_list_store_append (liststore1, &iter);
+    //   gtk_list_store_set (liststore1, &iter,
+    //                 0, a,
+    //                 1, "world");
+    // }
+
+    //Lay du lieu tu database
+    DB_INIT();
+        int success = insert_bind("hahahaha", "12345433");
+         success = insert_bind("hahahaha", "12r345433");
+         success = insert_bind("hahahaha", "1255345433");
+
+    contacts *contactList = select_bind();
+    int list_size = get_list_size_after_select();
+    printf("List_size: %d\n",list_size);
+    printContactsList(contactList, list_size);
+    for(int i = 0; i < list_size; i++) {
       // Add a new row to the model
       gtk_list_store_append (liststore1, &iter);
       gtk_list_store_set (liststore1, &iter,
-                    0, a,
-                    1, "world");
+                    0, contactList[i].name,
+                    1, contactList[i].number);
+
     }
 
     //show window
     gtk_widget_show_all(window);
     gtk_main();
+
+    //exit
+    DB_CLOSE();
 
     return EXIT_SUCCESS;
 }

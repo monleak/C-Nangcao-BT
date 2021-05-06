@@ -1,0 +1,1 @@
+/usr/lib64/ccache/cc -rdynamic CMakeFiles/db-main.dir/db-main.c.o -o db-main  libsqlite3.a -lpthread -ldl 

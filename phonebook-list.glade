@@ -121,16 +121,6 @@
       <!-- column-name Số -->
       <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">a</col>
-        <col id="1" translatable="yes">b</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">c</col>
-        <col id="1" translatable="yes">d</col>
-      </row>
-    </data>
   </object>
   <object class="GtkTreeModelFilter" id="filter1">
     <property name="child_model">liststore1</property>
@@ -431,10 +421,13 @@
                 <property name="label">gtk-ok</property>
                 <property name="width_request">80</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <property name="always_show_image">True</property>
+
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-stock">True</property>
+                <property name="always-show-image">True</property>
+                <signal name="clicked" handler="on_ok_btn1_clicked" swapped="no"/>
+
               </object>
               <packing>
                 <property name="expand">True</property>

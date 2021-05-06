@@ -121,16 +121,6 @@
       <!-- column-name Số -->
       <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">a</col>
-        <col id="1" translatable="yes">b</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">c</col>
-        <col id="1" translatable="yes">d</col>
-      </row>
-    </data>
   </object>
   <object class="GtkTreeModelFilter" id="filter1">
     <property name="child_model">liststore1</property>
@@ -337,9 +327,11 @@
   <object class="GtkWindow" id="add-thucong">
     <property name="can_focus">False</property>
     <property name="events"/>
-    <property name="urgency_hint">True</property>
-    <property name="attached_to">main</property>
-    <property name="startup_id">2</property>
+
+    <property name="urgency-hint">True</property>
+    <property name="attached-to">window1</property>
+    <property name="startup-id">2</property>
+
     <signal name="destroy-event" handler="on_window2_destroy_event" swapped="no"/>
     <child type="titlebar">
       <placeholder/>
