@@ -38,7 +38,7 @@ GtkEntry   *entry2;
 void on_cacel_btn2_clicked() {
     // gtk_container_remove(window2);
      // gtk_window_close(GTK_WINDOW(window2));
-    gtk_widget_hide(window2);
+    gtk_widget_hide(addthucong);
 }
 
 void on_ok_btn1_clicked() {
@@ -85,7 +85,7 @@ void add_thucong (GtkButton *b) {
 
     if(addthucong){
         gtk_widget_show_all(addthucong);
-        gtk_window_close(GTK_WINDOW(addluachon));
+        gtk_widget_hide(addluachon);
     }
 }
 
@@ -95,7 +95,7 @@ void add_file (GtkButton *b) {
 
     if(addfile){
         gtk_widget_show_all(addfile);
-        gtk_window_close(GTK_WINDOW(addluachon));
+        gtk_widget_hide(addluachon);
     }
 }
 //==============================handle signal==============================
