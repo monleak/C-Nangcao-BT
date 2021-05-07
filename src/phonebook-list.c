@@ -216,7 +216,7 @@ int main(int argc, char *argv[]) {
     window2 = GTK_WIDGET(gtk_builder_get_object(builder, "window2"));
     entry1 = GTK_ENTRY(gtk_builder_get_object(builder, "entry3"));
     entry2 = GTK_ENTRY(gtk_builder_get_object(builder, "entry4"));
-    gtk_window_set_title (GTK_WINDOW (window2), "Add Contact");
+    // gtk_window_set_title (GTK_WINDOW (window2), "Add Contact");
 
   //HIEU
     addluachon = GTK_WIDGET(gtk_builder_get_object(builder, "addluachon"));
@@ -275,7 +275,8 @@ int main(int argc, char *argv[]) {
       gtk_list_store_append (liststore1, &iter);
       gtk_list_store_set (liststore1, &iter,
                     0, contactList[i].name,
-                    1, contactList[i].number);
+                    1, contactList[i].number,
+                     -1);
 
     }
 
