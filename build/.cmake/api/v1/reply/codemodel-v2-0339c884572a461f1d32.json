@@ -1,0 +1,86 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.6"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "phonebook",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "gtk-test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-gtk-test-Debug-dcd7ef3b7fe69402fd68.json",
+					"name" : "gtk-test",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "phonebook::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-phonebook-Debug-dab961cface3c1f7952b.json",
+					"name" : "phonebook",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "phonebook-list::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-phonebook-list-Debug-e09a242e6ace785e0fec.json",
+					"name" : "phonebook-list",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "sorted-filted::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sorted-filted-Debug-dcbb2eb824863a9430ec.json",
+					"name" : "sorted-filted",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/kryo/Desktop/C-Nangcao-BT/build",
+		"source" : "/home/kryo/Desktop/C-Nangcao-BT"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 2
+	}
+}
