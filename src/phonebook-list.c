@@ -76,8 +76,10 @@ void on_button_create_clicked (GtkButton *b) {
     printf ("handle_create\n");
     gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Handle btn create");
 
-    if(addluachon)
+    if(addluachon){
+        gtk_window_set_deletable (addluachon,FALSE);
         gtk_widget_show_all(addluachon);
+    }
 }
 
 void add_thucong (GtkButton *b) {
@@ -85,6 +87,7 @@ void add_thucong (GtkButton *b) {
     gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Handle btn create");
 
     if(addthucong){
+        gtk_window_set_deletable (addthucong,FALSE);
         gtk_widget_show_all(addthucong);
         gtk_widget_hide(addluachon);
     }
@@ -95,9 +98,14 @@ void add_file (GtkButton *b) {
     gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Handle btn create");
 
     if(addfile){
+        gtk_window_set_deletable (addfile,FALSE);
         gtk_widget_show_all(addfile);
         gtk_widget_hide(addluachon);
     }
+}
+void close_addfile(GtkButton *b)
+{
+    if(addfile) gtk_widget_hide(addfile);
 }
 
 //==============================handle signal==============================

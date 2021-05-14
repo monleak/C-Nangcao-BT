@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "sqlite3.h"
+#include "./sqlite/sqlite3.h"
 #include "./db-main.h"
 
 //db_name, table_name

@@ -1,6 +1,0 @@
-/home/kryo/Desktop/C-Nangcao-BT/build/CMakeFiles/rebuild_cache.dir
-/home/kryo/Desktop/C-Nangcao-BT/build/CMakeFiles/edit_cache.dir
-/home/kryo/Desktop/C-Nangcao-BT/build/CMakeFiles/phonebook-list.dir
-/home/kryo/Desktop/C-Nangcao-BT/build/CMakeFiles/sorted-filted.dir
-/home/kryo/Desktop/C-Nangcao-BT/build/CMakeFiles/gtk-test.dir
-/home/kryo/Desktop/C-Nangcao-BT/build/CMakeFiles/phonebook.dir
