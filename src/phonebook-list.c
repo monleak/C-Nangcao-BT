@@ -35,10 +35,8 @@ GtkEntry   *entry1;
 GtkEntry   *entry2;
 
 //==============================feature: add==============================
-void on_cacel_btn2_clicked() {
-    // gtk_container_remove(window2);
-     // gtk_window_close(GTK_WINDOW(window2));
-    gtk_widget_hide(addthucong);
+void close_addthucong() {
+    gtk_widget_hide_on_delete (addthucong);
 }
 
 void on_ok_btn1_clicked() {
@@ -72,40 +70,42 @@ gboolean on_window2_destroy_event(GtkWidget *widget,
 }
 
 
-void on_button_create_clicked (GtkButton *b) {
+void click_create (GtkButton *b) {
     printf ("handle_create\n");
     gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Handle btn create");
 
     if(addluachon){
-        gtk_window_set_deletable (addluachon,FALSE);
         gtk_widget_show_all(addluachon);
     }
 }
 
-void add_thucong (GtkButton *b) {
+void click_add_thucong (GtkButton *b) {
     printf ("handle_create\n");
     gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Handle btn create");
 
     if(addthucong){
-        gtk_window_set_deletable (addthucong,FALSE);
         gtk_widget_show_all(addthucong);
-        gtk_widget_hide(addluachon);
+        gtk_widget_hide_on_delete(addluachon);
     }
 }
 
-void add_file (GtkButton *b) {
+void click_add_file (GtkButton *b) {
     printf ("handle_create\n");
     gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Handle btn create");
 
     if(addfile){
-        gtk_window_set_deletable (addfile,FALSE);
         gtk_widget_show_all(addfile);
-        gtk_widget_hide(addluachon);
+        gtk_widget_hide_on_delete(addluachon);
     }
 }
 void close_addfile(GtkButton *b)
 {
-    if(addfile) gtk_widget_hide(addfile);
+    if(addfile) 
+        gtk_widget_hide_on_delete(addfile);
+}
+void close_addluachon(GtkButton *b)
+{
+    gtk_widget_hide_on_delete(addluachon);
 }
 
 //==============================handle signal==============================
