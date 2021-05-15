@@ -18,6 +18,8 @@ extern int validate_number(char number[]) {
 	int len = strlen(number);
 	if(len == 0) {
 		return LEN_EQUAL_ZERO;
+	}else if (len < 10) {
+		return NUMBER_10;
 	}
 	return STR_OK;
 }

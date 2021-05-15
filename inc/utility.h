@@ -6,7 +6,8 @@ typedef enum PhonebookStrErr
 	STR_OK,
 	LEN_EQUAL_ZERO,
 	FIRST_IS_SPACE,
-	END_IS_SPACE
+	END_IS_SPACE,
+	NUMBER_10
 }PhonebookStrErr;
 
 extern int validate_name(char name[]);

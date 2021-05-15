@@ -64,7 +64,7 @@ void on_ok_btn1_clicked() {
     char *name = (char *)gtk_entry_get_text(entry_name);
     char *number = (char *)gtk_entry_get_text(entry_number);
     enum PhonebookStrErr nameErr = validate_name(name);
-    enum PhonebookStrErr numberErr = validate_name(number);
+    enum PhonebookStrErr numberErr = validate_number(number);
 
     if(nameErr == STR_OK && numberErr == STR_OK) 
     {
@@ -105,6 +105,9 @@ void on_ok_btn1_clicked() {
         {
             case LEN_EQUAL_ZERO:
                 gtk_label_set_text (GTK_LABEL(validateLabel), (const gchar* ) "Số điện thoại không được để trống");
+                break;
+            case NUMBER_10:
+                gtk_label_set_text (GTK_LABEL(validateLabel), (const gchar* ) "Số điện thoại ít nhất là 10 số");
                 break;
         };
     }
@@ -372,7 +375,7 @@ int main(int argc, char *argv[])
     //                  -1);
     // }
 
-    //Lay du lieu tu database
+//========= Lay du lieu tu database =======
     open_and_create_db();
     push_to_GUI(builder);
 
@@ -382,6 +385,6 @@ int main(int argc, char *argv[])
     //show window
     gtk_widget_show_all(window);
     gtk_main();
-
+    close_db();
     return EXIT_SUCCESS;
 }
