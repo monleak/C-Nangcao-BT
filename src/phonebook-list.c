@@ -5,7 +5,6 @@
 #include <ctype.h>
 
 #include "../inc/utility.h"
-// #include "../inc/db-main.h"
 
 //==========declare widget==========
 GtkBuilder  *builder;
@@ -37,6 +36,8 @@ GtkWidget   *window2;
 GtkEntry   *entry_name;
 GtkEntry   *entry_number;
 
+#include "../inc/db-main.h"
+
 //==============================feature: add==============================
 void close_addthucong() {
     gtk_widget_hide_on_delete (addthucong);
@@ -49,25 +50,28 @@ void on_ok_btn1_clicked() {
     enum PhonebookStrErr nameErr = validate_name(name);
     enum PhonebookStrErr numberErr = validate_name(number);
 
-    if(nameErr == STR_OK && numberErr == STR_OK) {
+    if(nameErr == STR_OK && numberErr == STR_OK) 
+    {
         int success = 1;
-        //success = insert_bind(name, number);
+        success = insert_db(name, number);
         gtk_widget_hide(addthucong);
-        if(success) {
+        if(success) 
+        {
             GtkTreeIter iter;
 
-            gtk_list_store_append (liststore1, &iter);
+            gtk_list_store_append (liststore1, &iter);       
             gtk_list_store_set (liststore1, &iter,
                     0, name,
                     1, number,
                     -1);
         }
-            gtk_entry_set_text(entry_name, "");
-            gtk_entry_set_text(entry_number, "");
-            printf("add %s\n", name);
+        gtk_entry_set_text(entry_name, "");
+        gtk_entry_set_text(entry_number, "");
+        printf("add %s\n", name);
     }else if(nameErr != STR_OK) 
     {
-        switch (nameErr){
+        switch (nameErr)
+        {
             case LEN_EQUAL_ZERO:
                 gtk_label_set_text (GTK_LABEL(validateLabel), (const gchar* ) "Tên không được để trống");
                 break;
@@ -81,7 +85,8 @@ void on_ok_btn1_clicked() {
 
     }else if(numberErr != STR_OK) 
     {
-        switch (numberErr){
+        switch (numberErr)
+        {
             case LEN_EQUAL_ZERO:
                 gtk_label_set_text (GTK_LABEL(validateLabel), (const gchar* ) "Số điện thoại không được để trống");
                 break;
@@ -223,7 +228,8 @@ on_row_activated (GtkTreeView *view,
 
 
 //==============================main==============================
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) 
+{
 
     //init
     gtk_init(&argc, &argv);
@@ -285,48 +291,36 @@ int main(int argc, char *argv[]) {
     GtkTreeIter iter;
 
     //add mock data
-    for(int i = 0; i < 10; i++) {
-        char *a = calloc( 10, sizeof(char));
-        char b[2];
-        b[0] = i+'a';
-        b[1] = '\0';
-        strcpy(a, "hello");
-        strcat(a, b);
-        printf("%s\n", a);
-      // Add a new row to the model
-      gtk_list_store_append (liststore1, &iter);
-      gtk_list_store_set (liststore1, &iter,
-                    0, a,
-                    1, "world",
-                     -1);
-    }
 
-    //Lay du lieu tu database
-    // DB_INIT();
-    //     int success = insert_bind("hahahaha", "12345433");
-    //      success = insert_bind("hahahaha", "12r345433");
-    //      success = insert_bind("hahahaha", "1255345433");
-
-    // contacts *contactList = select_bind();
-    // int list_size = get_list_size_after_select();
-    // printf("List_size: %d\n",list_size);
-    // printContactsList(contactList, list_size);
-    // for(int i = 0; i < list_size; i++) {
+    // for(int i = 0; i < 10; i++) {
+    //     char *a = calloc( 10, sizeof(char));
+    //     char b[2];
+    //     b[0] = i+'a';
+    //     b[1] = '\0';
+    //     strcpy(a, "hello");
+    //     strcat(a, b);
+    //     printf("%s\n", a);
     //   // Add a new row to the model
     //   gtk_list_store_append (liststore1, &iter);
     //   gtk_list_store_set (liststore1, &iter,
-    //                 0, contactList[i].name,
-    //                 1, contactList[i].number,
-    //                 -1);
-
+    //                 0, a,
+    //                 1, "world",
+    //                  -1);
     // }
+
+    //Lay du lieu tu database
+    open_and_create_db();
+    push_to_GUI();
+
+
+
 
     //show window
     gtk_widget_show_all(window);
     gtk_main();
 
     //exit
-    // DB_CLOSE();
+    close_db();
 
     return EXIT_SUCCESS;
 }
