@@ -34,8 +34,8 @@ GtkWidget   *addthucong;
 GtkWidget   *validateLabel;
 
 GtkWidget   *window2;
-GtkEntry   *entry1;
-GtkEntry   *entry2;
+GtkEntry   *entry_name;
+GtkEntry   *entry_number;
 
 //==============================feature: add==============================
 void close_addthucong() {
@@ -44,8 +44,8 @@ void close_addthucong() {
 
 void on_ok_btn1_clicked() {
     // if()
-    char *name = (char *)gtk_entry_get_text(entry1);
-    char *number = (char *)gtk_entry_get_text(entry2);
+    char *name = (char *)gtk_entry_get_text(entry_name);
+    char *number = (char *)gtk_entry_get_text(entry_number);
     enum PhonebookStrErr nameErr = validate_name(name);
     enum PhonebookStrErr numberErr = validate_name(number);
 
@@ -62,10 +62,11 @@ void on_ok_btn1_clicked() {
                     1, number,
                     -1);
         }
-            gtk_entry_set_text(entry1, "");
-            gtk_entry_set_text(entry2, "");
+            gtk_entry_set_text(entry_name, "");
+            gtk_entry_set_text(entry_number, "");
             printf("add %s\n", name);
-    }else if(nameErr != STR_OK) {
+    }else if(nameErr != STR_OK) 
+    {
         switch (nameErr){
             case LEN_EQUAL_ZERO:
                 gtk_label_set_text (GTK_LABEL(validateLabel), (const gchar* ) "Tên không được để trống");
@@ -78,7 +79,8 @@ void on_ok_btn1_clicked() {
                 break;
         };
 
-    }else if(numberErr != STR_OK) {
+    }else if(numberErr != STR_OK) 
+    {
         switch (numberErr){
             case LEN_EQUAL_ZERO:
                 gtk_label_set_text (GTK_LABEL(validateLabel), (const gchar* ) "Số điện thoại không được để trống");
@@ -251,8 +253,8 @@ int main(int argc, char *argv[]) {
 
 
     window2 = GTK_WIDGET(gtk_builder_get_object(builder, "window2"));
-    entry1 = GTK_ENTRY(gtk_builder_get_object(builder, "entry3"));
-    entry2 = GTK_ENTRY(gtk_builder_get_object(builder, "entry4"));
+    entry_name = GTK_ENTRY(gtk_builder_get_object(builder, "entry3"));
+    entry_number = GTK_ENTRY(gtk_builder_get_object(builder, "entry4"));
     validateLabel = GTK_WIDGET(gtk_builder_get_object(builder, "validate_label"));
     // gtk_window_set_title (GTK_WINDOW (window2), "Add Contact");
 
