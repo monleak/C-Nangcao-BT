@@ -5,6 +5,7 @@
 #include <ctype.h>
 
 #include "../inc/utility.h"
+#include "../inc/db-main.h"
 
 /*TODO: Sửa những chỗ có kieu dl:  gint column ->  enum:
                                     0           ->  COLUMN_NAME
@@ -49,9 +50,12 @@ GtkWidget   *window2;
 GtkEntry   *entry_name;
 GtkEntry   *entry_number;
 
-#include "../inc/db-main.h"
 
 //==============================feature: add==============================
+void close_phonebook()
+{
+    close_db();
+}
 void close_addthucong() {
     gtk_widget_hide_on_delete (addthucong);
 }
@@ -64,7 +68,7 @@ void on_ok_btn1_clicked() {
 
     if(nameErr == STR_OK && numberErr == STR_OK) 
     {
-        int success = 1;
+        int success = 0;
         success = insert_db(name, number);
         gtk_widget_hide(addthucong);
         if(success) 
@@ -370,7 +374,7 @@ int main(int argc, char *argv[])
 
     //Lay du lieu tu database
     open_and_create_db();
-    push_to_GUI(liststore1);
+    push_to_GUI(builder);
 
 
 
@@ -378,9 +382,6 @@ int main(int argc, char *argv[])
     //show window
     gtk_widget_show_all(window);
     gtk_main();
-
-    //exit
-    close_db();
 
     return EXIT_SUCCESS;
 }

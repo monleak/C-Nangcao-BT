@@ -25,8 +25,7 @@ sqlite3 *db = NULL;
  * @name: TEXT
  * @num: INTEGER
  */
-static const char create_sql[] = "DROP TABLE IF EXISTS "tablename";"
-"CREATE TABLE "tablename" (id INT PRIMARY KEY,name TEXT,num TEXT)";
+static const char create_table[] = "CREATE TABLE IF NOT EXISTS Phonebook(Id INT IDENTITY(1,1) PRIMARY KEY,name TEXT,number TEXT);";
 
 // static const char insert_sql[] = 	"INSERT INTO "
 // 							tablename
@@ -64,7 +63,7 @@ extern void open_and_create_db()  //Khởi tạo database
 	char *exec_errmsg;
 
 	// Khởi tạo table 
-	rc = sqlite3_exec(db, create_sql, NULL, NULL, &exec_errmsg);
+	rc = sqlite3_exec(db, create_table, 0, 0, &exec_errmsg);
 	if(SQLITE_OK != rc) {
 		fprintf(stderr, "Can't create table (%i): %s\n", rc, exec_errmsg);
 		sqlite3_free(exec_errmsg);
@@ -75,14 +74,11 @@ extern void open_and_create_db()  //Khởi tạo database
 
 extern int insert_db(char *name, char *number)
 {
-	char sql[100] ;
-	strcpy(sql, "INSERT INTO ");
-	strcat(sql, tablename);
-	strcat(sql, "('name', 'num') VALUES( '");
+	char sql[100]="INSERT INTO Phonebook(name,number) VALUES('";
 	strcat(sql, name);
 	strcat(sql, "', '");
 	strcat(sql, number);
-	strcat(sql, "');");
+	strcat(sql,"');\0");
 	char *err_msg = 0;
 	int rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
 	if (rc != SQLITE_OK ) 
@@ -90,13 +86,12 @@ extern int insert_db(char *name, char *number)
 	    fprintf(stderr, "SQL error: %s\n", err_msg);
 	    sqlite3_free(err_msg);
 	    return 0;
-    }
-    return 1;
+    }else return 1;
 }
 
-int callback(void *NotUsed, int argc, char **argv, char **azColName) 
+int callback(void *liststore, int argc, char **argv, char **azColName) 
 {
-	GtkListStore *liststore = GTK_LIST_STORE(NotUsed);
+	// GtkListStore *liststore = GTK_LIST_STORE(gtk_builder_get_object(builder, "liststore1"));
 	GtkTreeIter iter;
 
     gtk_list_store_append (liststore, &iter);       
@@ -104,12 +99,14 @@ int callback(void *NotUsed, int argc, char **argv, char **azColName)
             0, argv[1],
             1, argv[2],
             -1);
+    printf("%s %s\n", argv[1],argv[2]);
 	return 0;
 }
 
-extern void push_to_GUI(GtkListStore *liststore)
+extern void push_to_GUI(GtkBuilder *builder)
 {
-	char *sql = "SELECT * FROM "tablename" ";
+	GtkListStore *liststore = GTK_LIST_STORE(gtk_builder_get_object(builder, "liststore1"));
+	char *sql = "SELECT * FROM Phonebook ";
 	int rc;
 	char *err_msg = 0;
 	rc = sqlite3_exec(db, sql, callback, liststore, &err_msg);
@@ -119,7 +116,6 @@ extern void push_to_GUI(GtkListStore *liststore)
 	    fprintf(stderr, "SQL error: %s\n", err_msg);
 	    sqlite3_free(err_msg);
 	    sqlite3_close(db);
-	    return ;
   	}
 }
 
