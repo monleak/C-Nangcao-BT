@@ -1,6 +1,3 @@
-/*
- *	Xem vi du cach dung o main
- */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -59,12 +56,12 @@ extern void open_and_create_db()  //Khởi tạo database
 	if(SQLITE_OK != rc) {
 		fprintf(stderr, "Can't open database %s (%i): %s\n", dbname, rc, sqlite3_errmsg(db));
 		sqlite3_close(db);
-		return 1;
+		return ;
 	}
 
 
 	// Báo lỗi của SQLite exec
-	char exec_errmsg[100];
+	char *exec_errmsg;
 
 	// Khởi tạo table 
 	rc = sqlite3_exec(db, create_sql, NULL, NULL, &exec_errmsg);
@@ -72,16 +69,22 @@ extern void open_and_create_db()  //Khởi tạo database
 		fprintf(stderr, "Can't create table (%i): %s\n", rc, exec_errmsg);
 		sqlite3_free(exec_errmsg);
 		sqlite3_close(db);
-		return 1;
+		return ;
 	}
 }
 
 extern int insert_db(char *name, char *number)
 {
-	char *sql = "INSERT INTO "tablename" VALUES("name", "number");"
-	int rc;
+	char sql[100] ;
+	strcpy(sql, "INSERT INTO ");
+	strcat(sql, tablename);
+	strcat(sql, "('name', 'num') VALUES( '");
+	strcat(sql, name);
+	strcat(sql, "', '");
+	strcat(sql, number);
+	strcat(sql, "');");
 	char *err_msg = 0;
-	rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
+	int rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
 	if (rc != SQLITE_OK ) 
 	{
 	    fprintf(stderr, "SQL error: %s\n", err_msg);
@@ -93,30 +96,30 @@ extern int insert_db(char *name, char *number)
 
 int callback(void *NotUsed, int argc, char **argv, char **azColName) 
 {
-	NotUsed = 0;
+	GtkListStore *liststore = GTK_LIST_STORE(NotUsed);
 	GtkTreeIter iter;
 
-    gtk_list_store_append (liststore1, &iter);       
-    gtk_list_store_set (liststore1, &iter,
+    gtk_list_store_append (liststore, &iter);       
+    gtk_list_store_set (liststore, &iter,
             0, argv[1],
             1, argv[2],
             -1);
 	return 0;
 }
 
-extern void push_to_GUI()
+extern void push_to_GUI(GtkListStore *liststore)
 {
 	char *sql = "SELECT * FROM "tablename" ";
 	int rc;
 	char *err_msg = 0;
-	rc = sqlite3_exec(db, sql, callback, 0, &err_msg);
+	rc = sqlite3_exec(db, sql, callback, liststore, &err_msg);
 	if (rc != SQLITE_OK ) 
 	{
 	    fprintf(stderr, "Failed to select data\n");
 	    fprintf(stderr, "SQL error: %s\n", err_msg);
 	    sqlite3_free(err_msg);
 	    sqlite3_close(db);
-	    return 1;
+	    return ;
   	}
 }
 

@@ -6,7 +6,20 @@
 
 #include "../inc/utility.h"
 
+/*TODO: Sửa những chỗ có kieu dl:  gint column ->  enum:
+                                    0           ->  COLUMN_NAME
+                                    1           ->  COLUMN_SDT
+                                    số cột      ->  NUM_COLUMNS
+*/
+enum
+{
+  COLUMN_NAME,
+  COLUMN_SDT,
+  NUM_COLUMNS
+};
+
 //==========declare widget==========
+/*TODO: Đổi tên biến */
 GtkBuilder  *builder;
 GtkWidget   *window;
 GtkWidget   *button1;
@@ -44,7 +57,6 @@ void close_addthucong() {
 }
 
 void on_ok_btn1_clicked() {
-    // if()
     char *name = (char *)gtk_entry_get_text(entry_name);
     char *number = (char *)gtk_entry_get_text(entry_number);
     enum PhonebookStrErr nameErr = validate_name(name);
@@ -95,12 +107,12 @@ void on_ok_btn1_clicked() {
 }
 
 
-gboolean on_window2_destroy_event(GtkWidget *widget,
-                                GdkEvent  *event,
-                                gpointer   user_data) {
+// gboolean on_window2_destroy_event(GtkWidget *widget,
+//                                 GdkEvent  *event,
+//                                 gpointer   user_data) {
 
-    return TRUE;
-}
+//     return TRUE;
+// }
 
 
 void click_create (GtkButton *b) {
@@ -226,6 +238,42 @@ on_row_activated (GtkTreeView *view,
     }
 }
 
+//=============================update==============================
+void
+cell_edited (GtkCellRendererText *cell,
+             const gchar         *path_string,
+             const gchar         *new_text,
+             gpointer             data)
+{
+  GtkTreeModel *model = (GtkTreeModel *)data;
+  GtkTreePath *path = gtk_tree_path_new_from_string (path_string);
+  GtkTreeIter iter;
+
+  gint column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
+
+  gtk_tree_model_get_iter (model, &iter, path);
+
+    gchar *old_text;
+
+    gtk_tree_model_get (model, &iter, column, &old_text, -1);
+    g_free (old_text);
+
+                /*FIXME: Lỗi khi sửa cột SDT*/
+                /*FIXME: Chưa validate dl*/
+                /*FIXME: Chưa update dữ liệu vào database*/
+
+    gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+                column, new_text, 
+                -1);
+
+  gtk_tree_path_free (path);
+}
+
+void click_update (GtkButton *b) {
+
+    gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Double click to update");
+
+}
 
 //==============================main==============================
 int main(int argc, char *argv[]) 
@@ -257,6 +305,18 @@ int main(int argc, char *argv[])
     filtered = GTK_TREE_MODEL_FILTER(gtk_builder_get_object(builder, "filter1"));
     sorted = GTK_TREE_MODEL_SORT(gtk_builder_get_object(builder, "sort1"));
 
+    /*FIXME: Có thể thay editable ở file glade*/
+    g_object_set (cr1,
+                "editable", TRUE,
+                NULL);
+    g_object_set (cr2,
+                "editable", TRUE,
+                NULL);
+    /*FIXME: Sửa khi bấm nút update mới có thể sửa giá trị*/
+    g_signal_connect (cr1, "edited",
+                G_CALLBACK (cell_edited), liststore1);
+    g_signal_connect (cr2, "edited",
+                G_CALLBACK (cell_edited), liststore1);
 
     window2 = GTK_WIDGET(gtk_builder_get_object(builder, "window2"));
     entry_name = GTK_ENTRY(gtk_builder_get_object(builder, "entry3"));
@@ -310,7 +370,7 @@ int main(int argc, char *argv[])
 
     //Lay du lieu tu database
     open_and_create_db();
-    push_to_GUI();
+    push_to_GUI(liststore1);
 
 
 

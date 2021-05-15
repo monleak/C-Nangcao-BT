@@ -15,9 +15,12 @@ message(STATUS "Include: ${GTK3_INCLUDE_DIRS}\n LIB_DIR: ${GTK3_LIBRARY_DIRS} \n
 # add_executable(phonebook src/phonebook-main.c  inc/db-main.c)
 # target_link_libraries(phonebook ${GTK3_LIBRARIES} sqlite3 pthread dl)
 include_directories(inc)
+
 add_library(utility src/utility.c)
+add_library(db inc/db-main.c)
+
 add_executable(phonebook-list src/phonebook-list.c)
-target_link_libraries(phonebook-list ${GTK3_LIBRARIES} utility)
+target_link_libraries(phonebook-list ${GTK3_LIBRARIES} utility db sqlite3 pthread dl)
 
 
 

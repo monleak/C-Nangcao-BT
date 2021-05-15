@@ -5,7 +5,7 @@
 // ========== Khai báo hàm ===============
 extern void open_and_create_db();
 extern int insert_db(char name[], char number[]);
-extern void push_to_GUI();
+extern void push_to_GUI(GtkListStore *liststore);
 extern void close_db();
 
 
