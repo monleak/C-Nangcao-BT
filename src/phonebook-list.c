@@ -109,6 +109,9 @@ void on_ok_btn1_clicked() {
             case NUMBER_10:
                 gtk_label_set_text (GTK_LABEL(validateLabel), (const gchar* ) "Số điện thoại ít nhất là 10 số");
                 break;
+            case NUMBER_FIRST_0:
+                gtk_label_set_text (GTK_LABEL(validateLabel), (const gchar* ) "Số điện thoại phải bắt đầu bằng 0");
+                break;
         };
     }
 }
