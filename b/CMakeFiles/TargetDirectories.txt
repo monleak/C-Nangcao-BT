@@ -1,3 +1,4 @@
-/home/monleak/C-Nangcao-BT/b/CMakeFiles/rebuild_cache.dir
-/home/monleak/C-Nangcao-BT/b/CMakeFiles/edit_cache.dir
-/home/monleak/C-Nangcao-BT/b/CMakeFiles/phonebook-list.dir
+/home/kryo/Desktop/C-Nangcao-BT/b/CMakeFiles/rebuild_cache.dir
+/home/kryo/Desktop/C-Nangcao-BT/b/CMakeFiles/edit_cache.dir
+/home/kryo/Desktop/C-Nangcao-BT/b/CMakeFiles/phonebook-list.dir
+/home/kryo/Desktop/C-Nangcao-BT/b/CMakeFiles/utility.dir

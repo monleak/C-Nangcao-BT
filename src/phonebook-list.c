@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
+#include <ctype.h>
 
+#include "../inc/utility.h"
 // #include "../inc/db-main.h"
 
 //==========declare widget==========
@@ -29,6 +31,7 @@ gchar *searchValue = "";
 GtkWidget   *addluachon;
 GtkWidget   *addfile;
 GtkWidget   *addthucong;
+GtkWidget   *validateLabel;
 
 GtkWidget   *window2;
 GtkEntry   *entry1;
@@ -43,22 +46,45 @@ void on_ok_btn1_clicked() {
     // if()
     char *name = (char *)gtk_entry_get_text(entry1);
     char *number = (char *)gtk_entry_get_text(entry2);
-    if(1) {
+    enum PhonebookStrErr nameErr = validate_name(name);
+    enum PhonebookStrErr numberErr = validate_name(number);
+
+    if(nameErr == STR_OK && numberErr == STR_OK) {
         int success = 1;
         //success = insert_bind(name, number);
-        gtk_widget_hide(window2);
+        gtk_widget_hide(addthucong);
         if(success) {
             GtkTreeIter iter;
 
             gtk_list_store_append (liststore1, &iter);
             gtk_list_store_set (liststore1, &iter,
                     0, name,
-                    1, number);
+                    1, number,
+                    -1);
         }
+            gtk_entry_set_text(entry1, "");
+            gtk_entry_set_text(entry2, "");
+            printf("add %s\n", name);
+    }else if(nameErr != STR_OK) {
+        switch (nameErr){
+            case LEN_EQUAL_ZERO:
+                gtk_label_set_text (GTK_LABEL(validateLabel), (const gchar* ) "Tên không được để trống");
+                break;
+            case FIRST_IS_SPACE:
+                gtk_label_set_text (GTK_LABEL(validateLabel), (const gchar* ) "Tên không được bắt đầu bằng dấu cách");
+                break;
+            case END_IS_SPACE:
+                gtk_label_set_text (GTK_LABEL(validateLabel), (const gchar* ) "Tên không được kết thúc bằng dấu cách");
+                break;
+        };
+
+    }else if(numberErr != STR_OK) {
+        switch (numberErr){
+            case LEN_EQUAL_ZERO:
+                gtk_label_set_text (GTK_LABEL(validateLabel), (const gchar* ) "Số điện thoại không được để trống");
+                break;
+        };
     }
-    gtk_entry_set_text(entry1, "");
-    gtk_entry_set_text(entry2, "");
-    printf("%s\n", name);
 }
 
 
@@ -106,6 +132,18 @@ void close_addfile(GtkButton *b)
 void close_addluachon(GtkButton *b)
 {
     gtk_widget_hide_on_delete(addluachon);
+}
+//phone number entry acept only number
+void insert_text_event(GtkEditable *editable, const gchar *text, gint length, gint *position, gpointer data)
+{
+    int i;
+
+    for (i = 0; i < length; i++) {
+        if (!isdigit(text[i])) {
+            g_signal_stop_emission_by_name(G_OBJECT(editable), "insert-text");
+            return;
+        }
+    }
 }
 
 //==============================handle signal==============================
@@ -215,6 +253,7 @@ int main(int argc, char *argv[]) {
     window2 = GTK_WIDGET(gtk_builder_get_object(builder, "window2"));
     entry1 = GTK_ENTRY(gtk_builder_get_object(builder, "entry3"));
     entry2 = GTK_ENTRY(gtk_builder_get_object(builder, "entry4"));
+    validateLabel = GTK_WIDGET(gtk_builder_get_object(builder, "validate_label"));
     // gtk_window_set_title (GTK_WINDOW (window2), "Add Contact");
 
     //HIEU
