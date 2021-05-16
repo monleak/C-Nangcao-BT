@@ -43,9 +43,11 @@ static const char create_table[] = "CREATE TABLE IF NOT EXISTS Phonebook(Id INT 
 // 							" where ID=?; ";
 
 
-extern void open_and_create_db()  //Khởi tạo database
+extern void open_and_create_db(GtkBuilder *builder)  //Khởi tạo database
 {
-
+	GtkWidget   *label;
+	label = GTK_WIDGET(gtk_builder_get_object(builder, "label1"));
+	// gtk_label_set_text (GTK_LABEL(label), (const gchar* ) "Text");
 	// SQLite return value
 	int rc;
 
@@ -54,6 +56,7 @@ extern void open_and_create_db()  //Khởi tạo database
 	rc = sqlite3_open(dbname, &db);
 	if(SQLITE_OK != rc) {
 		fprintf(stderr, "Can't open database %s (%i): %s\n", dbname, rc, sqlite3_errmsg(db));
+		gtk_label_set_text (GTK_LABEL(label), (const gchar* ) "Không mở được database, hãy kiểm tra lại!");
 		sqlite3_close(db);
 		return ;
 	}
@@ -66,14 +69,17 @@ extern void open_and_create_db()  //Khởi tạo database
 	rc = sqlite3_exec(db, create_table, 0, 0, &exec_errmsg);
 	if(SQLITE_OK != rc) {
 		fprintf(stderr, "Can't create table (%i): %s\n", rc, exec_errmsg);
+		gtk_label_set_text (GTK_LABEL(label), (const gchar* ) "Không mở được database, hãy kiểm tra lại!");
 		sqlite3_free(exec_errmsg);
 		sqlite3_close(db);
 		return ;
 	}
 }
 
-extern int insert_db(char *name, char *number)
+extern int insert_db(char *name, char *number,GtkBuilder *builder)
 {
+	GtkWidget   *label;
+	label = GTK_WIDGET(gtk_builder_get_object(builder, "label1"));
 	char sql[100]="INSERT INTO Phonebook(name,number) VALUES('";
 	strcat(sql, name);
 	strcat(sql, "', '");
@@ -84,20 +90,16 @@ extern int insert_db(char *name, char *number)
 	if (rc != SQLITE_OK ) 
 	{
 	    fprintf(stderr, "SQL error: %s\n", err_msg);
+	    gtk_label_set_text (GTK_LABEL(label), (const gchar* ) "Lỗi khi lưu liên lạc,hãy thử lại!");
 	    sqlite3_free(err_msg);
 	    return 0;
-    }else return 1;
+    }else {
+    	printf("Tên: %s\nSố điện thoại: %s\nDone!\n\n", name,number);
+    	return 1;
+    }
 }
 int callback2(void *liststore, int argc, char **argv, char **azColName) 
 {
-	// ======== Đẩy dữ liệu file mới lên GUI =======
-	GtkTreeIter iter;
-
-    gtk_list_store_append (liststore, &iter);       
-    gtk_list_store_set (liststore, &iter,
-            0, argv[1],
-            1, argv[2],
-            -1);
     // Chèn dữ liệu mới vào file phonebook_data.db
     char sql[100]="INSERT INTO Phonebook(name,number) VALUES('";
 	strcat(sql, argv[1]);
@@ -110,10 +112,22 @@ int callback2(void *liststore, int argc, char **argv, char **azColName)
 	{
 	    fprintf(stderr, "SQL error: %s\n", err_msg);
 	    sqlite3_free(err_msg);
+    } else {
+    	// ======== Đẩy dữ liệu file mới lên GUI =======
+    	GtkTreeIter iter;
+
+	    gtk_list_store_append (liststore, &iter);       
+	    gtk_list_store_set (liststore, &iter,
+	            0, argv[1],
+	            1, argv[2],
+	            -1);
+    	printf("Tên: %s\nSố điện thoại: %s\nAdd success!\n\n", argv[1],argv[2]);
     }
 }
 extern void insert_db_from_file(char *file, GtkBuilder *builder)
 {
+	GtkWidget   *label;
+	label = GTK_WIDGET(gtk_builder_get_object(builder, "label1"));
 	sqlite3 *new_db = NULL;
 	int rc;
 	rc = sqlite3_open(file, &new_db);
@@ -130,6 +144,7 @@ extern void insert_db_from_file(char *file, GtkBuilder *builder)
 	{
 	    fprintf(stderr, "Failed to select data\n");
 	    fprintf(stderr, "SQL error: %s\n", err_msg);
+	    gtk_label_set_text (GTK_LABEL(label), (const gchar* ) "Không thể lấy dữ liệu từ database, hãy kiểm tra lại!");
 	    sqlite3_free(err_msg);
 	    sqlite3_close(new_db);
   	}
@@ -146,20 +161,25 @@ int callback(void *liststore, int argc, char **argv, char **azColName)
             0, argv[1],
             1, argv[2],
             -1);
-    printf("%s %s\n", argv[1],argv[2]);
+    printf("Tên: %s\nSố điện thoại: %s\n\n", argv[1],argv[2]);
 	return 0;
 }
 extern void push_to_GUI(GtkBuilder *builder)
 {
 	GtkListStore *liststore = GTK_LIST_STORE(gtk_builder_get_object(builder, "liststore1"));
+	GtkWidget   *label;
+	label = GTK_WIDGET(gtk_builder_get_object(builder, "label1"));
 	char *sql = "SELECT * FROM Phonebook ";
 	int rc;
 	char *err_msg = 0;
+	printf("=============== Dữ liệu tải lên ===============\n\n");
 	rc = sqlite3_exec(db, sql, callback, liststore, &err_msg);
+	printf("=============== Dữ liệu tải lên ===============\n");
 	if (rc != SQLITE_OK ) 
 	{
 	    fprintf(stderr, "Failed to select data\n");
 	    fprintf(stderr, "SQL error: %s\n", err_msg);
+	    gtk_label_set_text (GTK_LABEL(label), (const gchar* ) "Không thể lấy dữ liệu từ database, hãy kiểm tra lại!");
 	    sqlite3_free(err_msg);
 	    sqlite3_close(db);
   	}

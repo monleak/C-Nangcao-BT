@@ -3,8 +3,8 @@
 
 
 // ========== Khai báo hàm ===============
-extern void open_and_create_db();
-extern int insert_db(char name[], char number[]);
+extern void open_and_create_db(GtkBuilder *builder);
+extern int insert_db(char *name, char *number,GtkBuilder *builder);
 extern void push_to_GUI(GtkBuilder  *builder);
 extern void close_db();
 

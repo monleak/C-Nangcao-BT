@@ -45,6 +45,7 @@ gchar *searchValue = "";
 GtkWidget   *addluachon;
 GtkWidget   *addthucong;
 GtkWidget   *validateLabel;
+GtkWidget   *window_err;
 
 GtkWidget   *window2;
 GtkEntry   *entry_name;
@@ -71,7 +72,7 @@ void on_ok_btn1_clicked() {
     if(nameErr == STR_OK && numberErr == STR_OK) 
     {
         int success = 0;
-        success = insert_db(name, number);
+        success = insert_db(name, number,builder);
         gtk_widget_hide(addthucong);
         if(success) 
         {
@@ -365,7 +366,7 @@ int main(int argc, char *argv[])
     // }
 
 //========= Lay du lieu tu database =======
-    open_and_create_db();
+    open_and_create_db(builder);
     push_to_GUI(builder);
 
 
