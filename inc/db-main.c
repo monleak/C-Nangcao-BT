@@ -88,10 +88,57 @@ extern int insert_db(char *name, char *number)
 	    return 0;
     }else return 1;
 }
+int callback2(void *liststore, int argc, char **argv, char **azColName) 
+{
+	// ======== Đẩy dữ liệu file mới lên GUI =======
+	GtkTreeIter iter;
+
+    gtk_list_store_append (liststore, &iter);       
+    gtk_list_store_set (liststore, &iter,
+            0, argv[1],
+            1, argv[2],
+            -1);
+    // Chèn dữ liệu mới vào file phonebook_data.db
+    char sql[100]="INSERT INTO Phonebook(name,number) VALUES('";
+	strcat(sql, argv[1]);
+	strcat(sql, "', '");
+	strcat(sql, argv[2]);
+	strcat(sql,"');\0");
+	char *err_msg = 0;
+	int rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
+	if (rc != SQLITE_OK ) 
+	{
+	    fprintf(stderr, "SQL error: %s\n", err_msg);
+	    sqlite3_free(err_msg);
+    }
+}
+extern void insert_db_from_file(char *file, GtkBuilder *builder)
+{
+	sqlite3 *new_db = NULL;
+	int rc;
+	rc = sqlite3_open(file, &new_db);
+	if(SQLITE_OK != rc) {
+		fprintf(stderr, "Can't open database %s (%i): %s\n", file, rc, sqlite3_errmsg(new_db));
+		sqlite3_close(db);
+	}
+	// ======== Đẩy dữ liệu file mới lên GUI =======
+	GtkListStore *liststore = GTK_LIST_STORE(gtk_builder_get_object(builder, "liststore1"));
+	char *sql = "SELECT * FROM Phonebook ";
+	char *err_msg = 0;
+	rc = sqlite3_exec(new_db, sql, callback2, liststore, &err_msg);
+	if (rc != SQLITE_OK ) 
+	{
+	    fprintf(stderr, "Failed to select data\n");
+	    fprintf(stderr, "SQL error: %s\n", err_msg);
+	    sqlite3_free(err_msg);
+	    sqlite3_close(new_db);
+  	}
+	// ======== Đẩy dữ liệu file mới lên GUI =======
+	// Chèn dữ liệu mới vào file phonebook_data.db
+}
 
 int callback(void *liststore, int argc, char **argv, char **azColName) 
 {
-	// GtkListStore *liststore = GTK_LIST_STORE(gtk_builder_get_object(builder, "liststore1"));
 	GtkTreeIter iter;
 
     gtk_list_store_append (liststore, &iter);       
@@ -102,7 +149,6 @@ int callback(void *liststore, int argc, char **argv, char **azColName)
     printf("%s %s\n", argv[1],argv[2]);
 	return 0;
 }
-
 extern void push_to_GUI(GtkBuilder *builder)
 {
 	GtkListStore *liststore = GTK_LIST_STORE(gtk_builder_get_object(builder, "liststore1"));

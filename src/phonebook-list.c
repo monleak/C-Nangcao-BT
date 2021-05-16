@@ -29,6 +29,7 @@ GtkWidget   *button1;
 GtkWidget   *label1;
 GtkWidget   *view1;
 GtkWidget   *search1;
+GtkWidget   *file1;
 GtkListStore    *liststore1;
 GtkTreeView *treeview1;
 GtkTreeViewColumn   *column1;
@@ -42,7 +43,6 @@ GtkTreeModelSort *sorted;
 gchar *searchValue = "";
 
 GtkWidget   *addluachon;
-GtkWidget   *addfile;
 GtkWidget   *addthucong;
 GtkWidget   *validateLabel;
 
@@ -52,12 +52,14 @@ GtkEntry   *entry_number;
 
 
 //==============================feature: add==============================
-void close_phonebook()
-{
-    close_db();
-}
 void close_addthucong() {
     gtk_widget_hide_on_delete (addthucong);
+}
+
+void chon_file(GtkFileChooserButton *f)
+{
+    insert_db_from_file(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(f)),builder);
+    gtk_widget_hide_on_delete(addluachon);
 }
 
 void on_ok_btn1_clicked() {
@@ -144,20 +146,6 @@ void click_add_thucong (GtkButton *b) {
     }
 }
 
-void click_add_file (GtkButton *b) {
-    printf ("handle_create\n");
-    gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Handle btn create");
-
-    if(addfile){
-        gtk_widget_show_all(addfile);
-        gtk_widget_hide_on_delete(addluachon);
-    }
-}
-void close_addfile(GtkButton *b)
-{
-    if(addfile) 
-        gtk_widget_hide_on_delete(addfile);
-}
 void close_addluachon(GtkButton *b)
 {
     gtk_widget_hide_on_delete(addluachon);
@@ -315,6 +303,7 @@ int main(int argc, char *argv[])
     filtered = GTK_TREE_MODEL_FILTER(gtk_builder_get_object(builder, "filter1"));
     sorted = GTK_TREE_MODEL_SORT(gtk_builder_get_object(builder, "sort1"));
 
+    file1 = GTK_WIDGET(gtk_builder_get_object(builder, "chon_file"));
     /*FIXME: Có thể thay editable ở file glade*/
     g_object_set (cr1,
                 "editable", TRUE,
@@ -340,9 +329,6 @@ int main(int argc, char *argv[])
 
     addthucong = GTK_WIDGET(gtk_builder_get_object(builder, "addthucong"));
     gtk_window_set_title (GTK_WINDOW (addthucong), "Add Contact");
-
-    addfile = GTK_WIDGET(gtk_builder_get_object(builder, "addfile"));
-    gtk_window_set_title (GTK_WINDOW (addfile), "Add Contact");
 
 
 

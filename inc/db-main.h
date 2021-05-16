@@ -8,5 +8,8 @@ extern int insert_db(char name[], char number[]);
 extern void push_to_GUI(GtkBuilder  *builder);
 extern void close_db();
 
+int callback2(void *liststore, int argc, char **argv, char **azColName);
+extern void insert_db_from_file(char *file, GtkBuilder *builder);
+
 
 #endif // DB_MAIN_H_
