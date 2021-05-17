@@ -1,4 +1,4 @@
-# Install script for directory: /home/kryo/Desktop/C-Nangcao-BT
+# Install script for directory: /home/kryo/Desktop/test/C-Nangcao-BT
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/kryo/Desktop/C-Nangcao-BT/b/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/kryo/Desktop/test/C-Nangcao-BT/b/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -69,10 +69,10 @@ void chon_file(GtkFileChooserButton *f)
 }
 
 void on_ok_btn1_clicked() {
-    char *name = (char *)gtk_entry_get_text(entry_name);
-    char *number = (char *)gtk_entry_get_text(entry_number);
-    enum PhonebookStrErr nameErr = validate_name(name);
-    enum PhonebookStrErr numberErr = validate_number(number);
+    char *name      = (char *)gtk_entry_get_text(entry_name);
+    char *number    = (char *)gtk_entry_get_text(entry_number);
+    int nameErr     = validate_name(name);
+    int numberErr   = validate_number(number);
 
     if(nameErr == STR_OK && numberErr == STR_OK) 
     {
@@ -91,7 +91,6 @@ void on_ok_btn1_clicked() {
         }
         gtk_entry_set_text(entry_name, "");
         gtk_entry_set_text(entry_number, "");
-        printf("add %s\n", name);
     }else if(nameErr != STR_OK) 
     {
         switch (nameErr)
@@ -134,17 +133,14 @@ void on_ok_btn1_clicked() {
 
 
 void click_create (GtkButton *b) {
-    printf ("handle_create\n");
-    gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Handle btn create");
 
+    gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "");
     if(addluachon){
         gtk_widget_show_all(addluachon);
     }
 }
 
 void click_add_thucong (GtkButton *b) {
-    printf ("handle_create\n");
-    gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Handle btn create");
 
     if(addthucong){
         gtk_widget_show_all(addthucong);
@@ -181,6 +177,9 @@ void on_selection1_changed(GtkWidget *c){
         return;
 
     gtk_tree_model_get(model, &iter, 0, &value, -1);
+    gtk_list_store_set(liststore1, &iter, 0, "a",
+                                                    1, "ha",
+                                                    -1);
     gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) value);
     printf("SELECTED: %s\n", value);
 }
@@ -288,6 +287,16 @@ void click_update (GtkButton *b) {
         gtk_tree_model_get(model, &iter, 0, &value, -1);
         gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) value);
         printf("SELECTED: %s\n", value);
+
+        gchar *old_name;
+        gchar *old_number;
+
+        gtk_tree_model_get(model, &iter, COLUMN_NAME, &old_name,
+                                         COLUMN_SDT, &old_number,
+                                          -1);
+        gtk_entry_set_text(update_entry_name, old_name);
+        gtk_entry_set_text(update_entry_sdt, old_number);
+
         gtk_widget_show_all(update_window);
     }
 }
@@ -296,27 +305,48 @@ void cacel_update() {
     gtk_widget_hide_on_delete (update_window);
 }
 
-void on_update_ok_btn_clicked() {
-    char *name = (char *)gtk_entry_get_text(update_entry_name);
-    char *number = (char *)gtk_entry_get_text(update_entry_sdt);
-    int nameErr = validate_name(name);
-    int numberErr = validate_number(number);
+void on_update_ok_btn_clicked(GtkButton *b) {
+    GtkTreeIter iter;
+    GtkTreeModel *model;
+    gtk_tree_selection_get_selected(selection1, &model, &iter);
+
+    gchar *old_name;
+    gchar *old_number;
+
+    gtk_tree_model_get(model, &iter, COLUMN_NAME, &old_name,
+                                     COLUMN_SDT, &old_number,
+                                     -1);
+
+
+    char *name          = (char *)gtk_entry_get_text(update_entry_name);
+    char *number        = (char *)gtk_entry_get_text(update_entry_sdt);
+
+    int nameErr         = validate_name(name);
+    int numberErr       = validate_number(number);
+    // int isExistsName    = is_exists_in_db("name", name);
+    // int isExistsNumber  = is_exists_in_db("number", number);
+
+    // if(isExistsName) {
+    //     gtk_label_set_text (GTK_LABEL(update_validate_label), (const gchar* ) "Tên đã tồn tại");
+    // }else if(isExistsNumber){
+    //     gtk_label_set_text (GTK_LABEL(update_validate_label), (const gchar* ) "Số điện thoại đã tồn tại");
+    // }else 
 
     if(nameErr == STR_OK && numberErr == STR_OK) 
     {
         gtk_widget_hide_on_delete(update_window);
-        if(1) 
-        {
-            GtkTreeIter iter;
 
-            gtk_list_store_set (liststore1, &iter,
-                                0, name,
-                                1, number,
-                                -1);
-        }
+        /*FIXME: Gtk-CRITICAL **: 20:30:34.671: gtk_list_store_set_valist: assertion 'iter_is_valid (iter, list_store)' failed*/
+        // gtk_list_store_remove(liststore1, &iter);
+        // gtk_list_store_append(liststore1, &iter);
+        gtk_list_store_set (GTK_LIST_STORE(treeview1), &iter,
+                            COLUMN_NAME, name,
+                            COLUMN_SDT, number,
+                            -1);
+
         gtk_entry_set_text(update_entry_name, "");
         gtk_entry_set_text(update_entry_sdt, "");
-        printf("update %s\n", name);
+        printf("updated %s\n", name);
     }else if(nameErr != STR_OK) 
     {
         switch (nameErr)
@@ -398,7 +428,6 @@ int main(int argc, char *argv[])
     validateLabel = GTK_WIDGET(gtk_builder_get_object(builder, "validate_label"));
     // gtk_window_set_title (GTK_WINDOW (window2), "Add Contact");
 
-    //HIEU
     addluachon = GTK_WIDGET(gtk_builder_get_object(builder, "addluachon"));
     gtk_window_set_title (GTK_WINDOW (addluachon), "Add Contact");
 
