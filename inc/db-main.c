@@ -219,7 +219,7 @@ extern int is_exists_in_db(char *colName, char *name) {
 	strcat(sql, "=");
 	strcat(sql, name);
 	strcat(sql, ";");
-    sqlite3_exec(db, sql, callback, &num_rows, &errMsg);
+    sqlite3_exec(db, sql, exists_callback, &num_rows, &errMsg);
     return num_rows;
 }
 
