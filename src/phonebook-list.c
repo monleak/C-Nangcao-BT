@@ -86,7 +86,6 @@ void on_ok_btn1_clicked() {
         }
         gtk_entry_set_text(entry_name, "");
         gtk_entry_set_text(entry_number, "");
-        printf("add %s\n", name);
     }else if(nameErr != STR_OK) 
     {
         switch (nameErr)
@@ -129,17 +128,14 @@ void on_ok_btn1_clicked() {
 
 
 void click_create (GtkButton *b) {
-    printf ("handle_create\n");
-    gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Handle btn create");
 
+    gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "");
     if(addluachon){
         gtk_widget_show_all(addluachon);
     }
 }
 
 void click_add_thucong (GtkButton *b) {
-    printf ("handle_create\n");
-    gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Handle btn create");
 
     if(addthucong){
         gtk_widget_show_all(addthucong);
