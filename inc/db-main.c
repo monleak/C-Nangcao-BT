@@ -167,6 +167,7 @@ extern void insert_db_from_file(char *file, GtkBuilder *builder)
 	    sqlite3_free(err_msg);
 	    sqlite3_close(new_db);
   	}else gtk_label_set_text (GTK_LABEL(label), (const gchar* ) "Tải dữ liệu thành công!");
+  	sqlite3_close(new_db);
 	// ======== Đẩy dữ liệu file mới lên GUI =======
 	// Chèn dữ liệu mới vào file phonebook_data.db
 	
