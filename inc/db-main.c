@@ -205,6 +205,52 @@ extern void push_to_GUI(GtkBuilder *builder)
   	}
 }
 
+
+static int exists_callback(void *num_rows, int argc, char **argv, char **azColName){
+	return *(int *)num_rows++;
+}
+
+extern int is_exists_in_db(char *colName, char *name) {
+	int num_rows = 0;
+	char sql[100];
+	char *errMsg;
+	strcpy(sql, "SELECT COUNT(*) FROM " tablename " WHERE ");
+	strcat(sql, colName);
+	strcat(sql, "=");
+	strcat(sql, name);
+	strcat(sql, ";");
+    sqlite3_exec(db, sql, callback, &num_rows, &errMsg);
+    return num_rows;
+}
+
+extern int update_db(char *colName, char *old_name, char *new_name){
+	char sql[100];
+	
+	if(strcmp(old_name, new_name) != 0) {
+	    fprintf(stderr, "Is exists: %s\n", new_name);
+    }else{
+    	strcpy(sql, "UPDATE " tablename " SET ");
+		strcat(sql, colName);
+		strcat(sql, " = '");
+		strcat(sql, new_name);
+		strcat(sql, "' WHERE ");
+		strcat(sql, colName);
+		strcat(sql, " = '");
+		strcat(sql, old_name);
+		strcat(sql, "';");
+		printf("%s\n", sql);
+		char *err_msg = 0;
+		int rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
+		if (rc != SQLITE_OK ) 
+		{
+		    fprintf(stderr, "SQL error update_db_name: %s\n", err_msg);
+		    sqlite3_free(err_msg);
+		    return 0;
+	    }else return 1;
+    }
+}
+
+
 extern void close_db()
 {
 	sqlite3_close(db);
