@@ -46,10 +46,15 @@ GtkWidget   *addluachon;
 GtkWidget   *addthucong;
 GtkWidget   *validateLabel;
 GtkWidget   *window_err;
+GtkEntry    *entry_name;
+GtkEntry    *entry_number;
 
-GtkWidget   *window2;
-GtkEntry   *entry_name;
-GtkEntry   *entry_number;
+GtkWidget   *update_window;
+GtkEntry    *update_entry_name;
+GtkEntry    *update_entry_sdt;
+GtkWidget   *update_validate_label;
+GtkWidget   *update_ok_btn;
+GtkWidget   *update_cacel_btn;
 
 
 //==============================feature: add==============================
@@ -238,40 +243,110 @@ on_row_activated (GtkTreeView *view,
 }
 
 //=============================update==============================
-void
-cell_edited (GtkCellRendererText *cell,
-             const gchar         *path_string,
-             const gchar         *new_text,
-             gpointer             data)
-{
-  GtkTreeModel *model = (GtkTreeModel *)data;
-  GtkTreePath *path = gtk_tree_path_new_from_string (path_string);
-  GtkTreeIter iter;
+// void
+// cell_edited (GtkCellRendererText *cell,
+//              const gchar         *path_string,
+//              const gchar         *new_text,
+//              gpointer             data)
+// {
+//   GtkTreeModel *model = (GtkTreeModel *)data;
+//   GtkTreePath *path = gtk_tree_path_new_from_string (path_string);
+//   GtkTreeIter iter;
 
-  gint column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
+//   gint column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
 
-  gtk_tree_model_get_iter (model, &iter, path);
+//   gtk_tree_model_get_iter (model, &iter, path);
 
-    gchar *old_text;
+//     gchar *old_text;
 
-    gtk_tree_model_get (model, &iter, column, &old_text, -1);
-    g_free (old_text);
+//     gtk_tree_model_get (model, &iter, column, &old_text, -1);
+//     g_free (old_text);
 
-                /*FIXME: Lỗi khi sửa cột SDT*/
-                /*FIXME: Chưa validate dl*/
-                /*FIXME: Chưa update dữ liệu vào database*/
+//                 /*FIXME: Lỗi khi sửa cột SDT*/
+//                 /*FIXME: Chưa validate dl*/
+//                 /*FIXME: Chưa update dữ liệu vào database*/
 
-    gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-                column, new_text, 
-                -1);
+//     gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+//                 column, new_text, 
+//                 -1);
 
-  gtk_tree_path_free (path);
-}
+//   gtk_tree_path_free (path);
+// }
 
 void click_update (GtkButton *b) {
+    printf ("handle_create\n");
+    gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Handle btn update");
 
-    gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Double click to update");
+    gchar *value;
+    GtkTreeIter iter;
+    GtkTreeModel *model;
 
+    if(gtk_tree_selection_get_selected(
+        selection1, &model, &iter) == FALSE){
+        printf("Not select row!\n");
+    }else{
+        gtk_tree_model_get(model, &iter, 0, &value, -1);
+        gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) value);
+        printf("SELECTED: %s\n", value);
+        gtk_widget_show_all(update_window);
+    }
+}
+
+void cacel_update() {
+    gtk_widget_hide_on_delete (update_window);
+}
+
+void on_update_ok_btn_clicked() {
+    char *name = (char *)gtk_entry_get_text(update_entry_name);
+    char *number = (char *)gtk_entry_get_text(update_entry_sdt);
+    int nameErr = validate_name(name);
+    int numberErr = validate_number(number);
+
+    if(nameErr == STR_OK && numberErr == STR_OK) 
+    {
+        gtk_widget_hide_on_delete(update_window);
+        if(1) 
+        {
+            GtkTreeIter iter;
+
+            gtk_list_store_set (liststore1, &iter,
+                                0, name,
+                                1, number,
+                                -1);
+        }
+        gtk_entry_set_text(update_entry_name, "");
+        gtk_entry_set_text(update_entry_sdt, "");
+        printf("update %s\n", name);
+    }else if(nameErr != STR_OK) 
+    {
+        switch (nameErr)
+        {
+            case LEN_EQUAL_ZERO:
+                gtk_label_set_text (GTK_LABEL(update_validate_label), (const gchar* ) "Tên không được để trống");
+                break;
+            case FIRST_IS_SPACE:
+                gtk_label_set_text (GTK_LABEL(update_validate_label), (const gchar* ) "Tên không được bắt đầu bằng dấu cách");
+                break;
+            case END_IS_SPACE:
+                gtk_label_set_text (GTK_LABEL(update_validate_label), (const gchar* ) "Tên không được kết thúc bằng dấu cách");
+                break;
+        };
+
+    }else if(numberErr != STR_OK) 
+    {
+        switch (numberErr)
+        {
+            case LEN_EQUAL_ZERO:
+                gtk_label_set_text (GTK_LABEL(update_validate_label), (const gchar* ) "Số điện thoại không được để trống");
+                break;
+            case NUMBER_10:
+                gtk_label_set_text (GTK_LABEL(update_validate_label), (const gchar* ) "Số điện thoại ít nhất là 10 số");
+                break;
+            case NUMBER_FIRST_0:
+                gtk_label_set_text (GTK_LABEL(update_validate_label), (const gchar* ) "Số điện thoại phải bắt đầu bằng 0");
+                break;
+        };
+    }
 }
 
 //==============================main==============================
@@ -305,20 +380,19 @@ int main(int argc, char *argv[])
     sorted = GTK_TREE_MODEL_SORT(gtk_builder_get_object(builder, "sort1"));
 
     file1 = GTK_WIDGET(gtk_builder_get_object(builder, "chon_file"));
-    /*FIXME: Có thể thay editable ở file glade*/
-    g_object_set (cr1,
-                "editable", TRUE,
-                NULL);
-    g_object_set (cr2,
-                "editable", TRUE,
-                NULL);
-    /*FIXME: Sửa khi bấm nút update mới có thể sửa giá trị*/
-    g_signal_connect (cr1, "edited",
-                G_CALLBACK (cell_edited), liststore1);
-    g_signal_connect (cr2, "edited",
-                G_CALLBACK (cell_edited), liststore1);
+    // /*FIXME: Có thể thay editable ở file glade*/
+    // g_object_set (cr1,
+                // "editable", TRUE,
+                // NULL);
+    // g_object_set (cr2,
+                // "editable", TRUE,
+                // NULL);
+    // /*FIXME: Sửa khi bấm nút update mới có thể sửa giá trị*/
+    // g_signal_connect (cr1, "edited",
+                // G_CALLBACK (cell_edited), liststore1);
+    // g_signal_connect (cr2, "edited",
+                // G_CALLBACK (cell_edited), liststore1);
 
-    window2 = GTK_WIDGET(gtk_builder_get_object(builder, "window2"));
     entry_name = GTK_ENTRY(gtk_builder_get_object(builder, "entry3"));
     entry_number = GTK_ENTRY(gtk_builder_get_object(builder, "entry4"));
     validateLabel = GTK_WIDGET(gtk_builder_get_object(builder, "validate_label"));
@@ -331,7 +405,14 @@ int main(int argc, char *argv[])
     addthucong = GTK_WIDGET(gtk_builder_get_object(builder, "addthucong"));
     gtk_window_set_title (GTK_WINDOW (addthucong), "Add Contact");
 
-
+    //update_window
+    update_window           = GTK_WIDGET(gtk_builder_get_object(builder, "update_window"));
+    update_entry_name       = GTK_ENTRY(gtk_builder_get_object(builder, "update_entry_name"));
+    update_entry_sdt        = GTK_ENTRY(gtk_builder_get_object(builder, "update_entry_sdt"));
+    update_validate_label   = GTK_WIDGET(gtk_builder_get_object(builder, "update_validate_label"));
+    update_ok_btn           = GTK_WIDGET(gtk_builder_get_object(builder, "update_ok_btn"));
+    update_cacel_btn        = GTK_WIDGET(gtk_builder_get_object(builder, "update_cacel_btn"));
+    gtk_window_set_title (GTK_WINDOW (update_window), "Update");
 
     //set filter function
     gtk_tree_model_filter_set_visible_func (filtered,

@@ -144,13 +144,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button_refresh">
+                  <object class="GtkButton" id="button_update">
                     <property name="width-request">90</property>
                     <property name="height-request">40</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
                     <property name="always-show-image">True</property>
+                    <signal name="clicked" handler="click_update" swapped="no"/>
                     <child>
                       <object class="GtkImage">
                         <property name="visible">True</property>
@@ -439,6 +440,162 @@
                 <property name="use-stock">True</property>
                 <property name="always-show-image">True</property>
                 <signal name="clicked" handler="on_ok_btn1_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkWindow" id="update_window">
+    <property name="can-focus">False</property>
+    <signal name="delete-event" handler="cacel_update" swapped="no"/>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <!-- n-columns=3 n-rows=3 -->
+          <object class="GtkGrid">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-top">10</property>
+            <property name="border-width">10</property>
+            <property name="row-spacing">15</property>
+            <property name="column-spacing">20</property>
+            <child>
+              <object class="GtkEntry" id="update_entry_name">
+                <property name="width-request">250</property>
+                <property name="height-request">40</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="max-length">32</property>
+                <property name="max-width-chars">32</property>
+                <property name="primary-icon-stock">gtk-orientation-portrait</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="update_entry_sdt">
+                <property name="width-request">250</property>
+                <property name="height-request">40</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="max-length">11</property>
+                <property name="max-width-chars">32</property>
+                <property name="primary-icon-stock">gtk-dialog-authentication</property>
+                <property name="input-purpose">number</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="width-request">120</property>
+                <property name="height-request">40</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Tên</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="width-request">120</property>
+                <property name="height-request">40</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Số điện thoại</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="update_validate_label">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <attributes>
+                  <attribute name="foreground" value="#e0e01b1b2424"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButtonBox">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="border-width">8</property>
+            <property name="spacing">10</property>
+            <property name="layout-style">end</property>
+            <child>
+              <object class="GtkButton" id="update_cacel_btn">
+                <property name="label">gtk-close</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-stock">True</property>
+                <property name="always-show-image">True</property>
+                <signal name="clicked" handler="cacel_update" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="update_ok_btn">
+                <property name="label">gtk-ok</property>
+                <property name="width-request">80</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-stock">True</property>
+                <property name="always-show-image">True</property>
+                <signal name="clicked" handler="on_update_ok_btn_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
