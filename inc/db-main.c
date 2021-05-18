@@ -207,19 +207,19 @@ extern void push_to_GUI(GtkBuilder *builder)
 
 
 static int exists_callback(void *num_rows, int argc, char **argv, char **azColName){
-	return *(int *)num_rows++;
+	*(int *)num_rows = atoi(argv[0]);
 }
 
 extern int is_exists_in_db(char *colName, char *name) {
 	int num_rows = 0;
 	char sql[100];
 	char *errMsg;
-	strcpy(sql, "SELECT COUNT(*) FROM " tablename " WHERE ");
+	strcpy(sql, "SELECT COUNT(*) AS num FROM " tablename " WHERE ");
 	strcat(sql, colName);
-	strcat(sql, "=");
+	strcat(sql, "='");
 	strcat(sql, name);
-	strcat(sql, ";");
-    sqlite3_exec(db, sql, callback, &num_rows, &errMsg);
+	strcat(sql, "';");
+    sqlite3_exec(db, sql, exists_callback, &num_rows, &errMsg);
     return num_rows;
 }
 
