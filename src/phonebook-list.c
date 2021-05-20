@@ -56,6 +56,9 @@ GtkWidget   *update_validate_label;
 GtkWidget   *update_ok_btn;
 GtkWidget   *update_cacel_btn;
 
+GtkWidget   *xacnhandelete;
+GtkWidget   *delete_name;
+GtkWidget   *delete_number;
 
 //==============================feature: add==============================
 void close_addthucong() {
@@ -395,7 +398,57 @@ void on_update_ok_btn_clicked(GtkButton *b) {
         };
     }
 }
+//==============================DELETE==============================
+void click_delete (GtkButton *b) {
+    gchar *value;
+    GtkTreeIter iter;
+    GtkTreeModel *model;
+    gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "");
+    if(gtk_tree_selection_get_selected(selection1, &model, &iter) == FALSE)
+    {
+        printf("Chọn liên hệ muốn xóa!\n");
+        gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) "Chọn liên hệ muốn xóa!");
+    }else{
+        gtk_tree_model_get(model, &iter, 0, &value, -1);
+        // gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) value);
 
+        gchar *old_name;
+        gchar *old_number;
+
+        gtk_tree_model_get(model, &iter, COLUMN_NAME, &old_name,
+                                         COLUMN_SDT, &old_number,
+                                          -1);
+        gtk_label_set_text (GTK_LABEL(delete_name), old_name);
+        gtk_label_set_text (GTK_LABEL(delete_number), old_number);
+        gtk_widget_show_all(xacnhandelete);
+    }
+}
+void close_delete()
+{
+    gtk_widget_hide_on_delete (xacnhandelete);
+}
+void click_xacnhan_delete()
+{
+    gchar *value;
+    GtkTreeIter iter;
+    GtkTreeModel *model;
+    GtkTreePath *path;
+    gtk_tree_model_get(model, &iter, 0, &value, -1);
+    // gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) value);
+
+    gchar *name;
+
+    gtk_tree_model_get(model, &iter, COLUMN_NAME, &name,
+                                      -1);
+    if(delete_db(name,builder))
+    {
+        gtk_tree_model_get_iter (GTK_TREE_MODEL (liststore1),
+                           &iter,
+                           path);
+        gtk_tree_path_free (path);
+        gtk_list_store_remove (liststore1, &iter);
+    }
+}
 //==============================main==============================
 int main(int argc, char *argv[]) 
 {
@@ -460,6 +513,10 @@ int main(int argc, char *argv[])
     update_cacel_btn        = GTK_WIDGET(gtk_builder_get_object(builder, "update_cacel_btn"));
     gtk_window_set_title (GTK_WINDOW (update_window), "Update");
 
+    xacnhandelete           = GTK_WIDGET(gtk_builder_get_object(builder, "xacnhandelete"));
+    gtk_window_set_title (GTK_WINDOW (xacnhandelete), "Delete");
+    delete_name = GTK_WIDGET(gtk_builder_get_object(builder, "delete_name"));
+    delete_number = GTK_WIDGET(gtk_builder_get_object(builder, "delete_number"));
     //set filter function
     gtk_tree_model_filter_set_visible_func (filtered,
                                             (GtkTreeModelFilterVisibleFunc) row_visible,

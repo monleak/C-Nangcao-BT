@@ -251,6 +251,29 @@ extern int update_db(char *old_name, char *new_name, char *new_number, GtkBuilde
     }
 }
 
+extern int delete_db(char *name, GtkBuilder *builder)
+{
+	GtkWidget   *label;
+	label = GTK_WIDGET(gtk_builder_get_object(builder, "label1"));
+	char sql[100] = "DELETE FROM "
+					tablename
+					" WHERE name = '";
+	strcat(sql, name);
+	strcat(sql, "';\0");
+	char *err_msg = 0;
+	int rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
+	if (rc != SQLITE_OK ) 
+	{
+	    fprintf(stderr, "SQL error: %s\n", err_msg);
+	    gtk_label_set_text (GTK_LABEL(label), (const gchar* ) "Không thể xóa liên hệ, hãy thử lại!");
+	    sqlite3_free(err_msg);
+	    return 0;
+    }else
+    {
+    	gtk_label_set_text (GTK_LABEL(label), (const gchar* ) "Xóa liên hệ thành công!");
+    	return 1;
+    }
+}
 
 extern void close_db()
 {

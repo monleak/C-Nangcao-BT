@@ -19,5 +19,7 @@ extern int update_db(char *old_name, char *new_name, char *new_number, GtkBuilde
 //	@colName: 	Tên cột
 //	@name:		Giá trị kiểm tra  
 extern int is_exists_in_db(char *colName, char *name); 	
+
+extern int delete_db(char *name, GtkBuilder *builder);
 														
 #endif // DB_MAIN_H_
