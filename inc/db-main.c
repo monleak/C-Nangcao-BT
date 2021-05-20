@@ -223,30 +223,31 @@ extern int is_exists_in_db(char *colName, char *name) {
     return num_rows;
 }
 
-extern int update_db(char *colName, char *old_name, char *new_name){
-	char sql[100];
-	
-	if(strcmp(old_name, new_name) != 0) {
-	    fprintf(stderr, "Is exists: %s\n", new_name);
-    }else{
-    	strcpy(sql, "UPDATE " tablename " SET ");
-		strcat(sql, colName);
-		strcat(sql, " = '");
-		strcat(sql, new_name);
-		strcat(sql, "' WHERE ");
-		strcat(sql, colName);
-		strcat(sql, " = '");
-		strcat(sql, old_name);
-		strcat(sql, "';");
-		printf("%s\n", sql);
-		char *err_msg = 0;
-		int rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
-		if (rc != SQLITE_OK ) 
-		{
-		    fprintf(stderr, "SQL error update_db_name: %s\n", err_msg);
-		    sqlite3_free(err_msg);
-		    return 0;
-	    }else return 1;
+extern int update_db(char *old_name, char *new_name, char *new_number, GtkBuilder *builder)
+{
+	GtkWidget   *label;
+	label = GTK_WIDGET(gtk_builder_get_object(builder, "label1"));
+	char sql[100] = "UPDATE "
+					tablename
+					" SET name = '";
+	strcat(sql, new_name);
+	strcat(sql, "', number= '");
+	strcat(sql, new_number);
+	strcat(sql, "' WHERE name = '");
+	strcat(sql, old_name);
+	strcat(sql, "';\0");
+	char *err_msg = 0;
+	int rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
+	if (rc != SQLITE_OK ) 
+	{
+	    fprintf(stderr, "SQL error update_db_name: %s\n", err_msg);
+	    gtk_label_set_text (GTK_LABEL(label), (const gchar* ) "Không thể chỉnh sửa liên hệ, hãy thử lại!");
+	    sqlite3_free(err_msg);
+	    return 0;
+    }else
+    {
+    	gtk_label_set_text (GTK_LABEL(label), (const gchar* ) "Chỉnh sửa liên hệ thành công!");
+    	return 1;
     }
 }
 

@@ -13,7 +13,7 @@ extern void insert_db_from_file(char file[], GtkBuilder *builder);
 
 //Update tên và sdt
 //UPDATE $tablename SET $colName = 'new_name' WHERE $colName = 'old_name' 
-extern int update_db(char *colName, char *old_name, char *new_name);
+extern int update_db(char *old_name, char *new_name, char *new_number, GtkBuilder *builder);
 
 //Kiểm tra giá trị có tồn tại trong cột không
 //	@colName: 	Tên cột
