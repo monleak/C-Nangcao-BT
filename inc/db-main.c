@@ -133,7 +133,7 @@ int callback2(void *liststore, int argc, char **argv, char **azColName)
 {
     if(KiemTraXau(argv[2]) == 1 && 
     	validate_name(argv[1]) == STR_OK && validate_number(argv[2]) == STR_OK && 
-    	is_exists_in_db("name", argv[1]) && is_exists_in_db("number", argv[2]))
+    	!is_exists_in_db("name", argv[1]) && !is_exists_in_db("number", argv[2]))
     {
     	// Chèn dữ liệu mới vào file phonebook_data.db
 	    char sql[100]="INSERT INTO Phonebook(name,number) VALUES('";
