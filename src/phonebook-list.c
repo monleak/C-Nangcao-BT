@@ -433,7 +433,8 @@ void click_xacnhan_delete()
     GtkTreeIter iter;
     GtkTreeModel *model;
     GtkTreePath *path;
-    gtk_tree_model_get(model, &iter, 0, &value, -1);
+    gtk_tree_selection_get_selected(selection1, &model, &iter);
+    path = gtk_tree_model_get_path(model, &iter);
     // gtk_label_set_text (GTK_LABEL(label1), (const gchar* ) value);
 
     gchar *name;
@@ -447,6 +448,7 @@ void click_xacnhan_delete()
                            path);
         gtk_tree_path_free (path);
         gtk_list_store_remove (liststore1, &iter);
+        gtk_widget_hide_on_delete(xacnhandelete);
     }
 }
 //==============================main==============================
