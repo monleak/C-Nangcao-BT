@@ -25,7 +25,7 @@ sqlite3 *db = NULL;
  * @name: TEXT
  * @num: INTEGER
  */
-static const char create_table[] = "CREATE TABLE IF NOT EXISTS Phonebook(Id INT IDENTITY(1,1) PRIMARY KEY,name TEXT,number TEXT);";
+static const char create_table[] = "CREATE TABLE IF NOT EXISTS Phonebook(name TEXT,number TEXT);";
 
 // static const char insert_sql[] = 	"INSERT INTO "
 // 							tablename
@@ -111,9 +111,29 @@ extern int insert_db(char *name, char *number,GtkBuilder *builder)
     	return 1;
     }
 }
+
+static int exists_callback(void *num_rows, int argc, char **argv, char **azColName){
+	*(int *)num_rows = atoi(argv[0]);
+}
+
+extern int is_exists_in_db(char *colName, char *name) {
+	int num_rows = 0;
+	char sql[100];
+	char *errMsg;
+	strcpy(sql, "SELECT COUNT(*) AS num FROM " tablename " WHERE ");
+	strcat(sql, colName);
+	strcat(sql, "='");
+	strcat(sql, name);
+	strcat(sql, "';");
+    sqlite3_exec(db, sql, exists_callback, &num_rows, &errMsg);
+    return num_rows;
+}
+
 int callback2(void *liststore, int argc, char **argv, char **azColName) 
 {
-    if(KiemTraXau(argv[2]) == 1 && validate_name(argv[1]) == STR_OK && validate_number(argv[2]) == STR_OK)
+    if(KiemTraXau(argv[2]) == 1 && 
+    	validate_name(argv[1]) == STR_OK && validate_number(argv[2]) == STR_OK && 
+    	!is_exists_in_db("name", argv[1]) && !is_exists_in_db("number", argv[2]))
     {
     	// Chèn dữ liệu mới vào file phonebook_data.db
 	    char sql[100]="INSERT INTO Phonebook(name,number) VALUES('";
@@ -205,23 +225,6 @@ extern void push_to_GUI(GtkBuilder *builder)
   	}
 }
 
-
-static int exists_callback(void *num_rows, int argc, char **argv, char **azColName){
-	*(int *)num_rows = atoi(argv[0]);
-}
-
-extern int is_exists_in_db(char *colName, char *name) {
-	int num_rows = 0;
-	char sql[100];
-	char *errMsg;
-	strcpy(sql, "SELECT COUNT(*) AS num FROM " tablename " WHERE ");
-	strcat(sql, colName);
-	strcat(sql, "='");
-	strcat(sql, name);
-	strcat(sql, "';");
-    sqlite3_exec(db, sql, exists_callback, &num_rows, &errMsg);
-    return num_rows;
-}
 
 extern int update_db(char *old_name, char *new_name, char *new_number, GtkBuilder *builder)
 {
