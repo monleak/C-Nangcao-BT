@@ -25,7 +25,7 @@ sqlite3 *db = NULL;
  * @name: TEXT
  * @num: INTEGER
  */
-static const char create_table[] = "CREATE TABLE IF NOT EXISTS Phonebook(Id INT IDENTITY(1,1) PRIMARY KEY,name TEXT,number TEXT);";
+static const char create_table[] = "CREATE TABLE IF NOT EXISTS Phonebook(name TEXT,number TEXT);";
 
 // static const char insert_sql[] = 	"INSERT INTO "
 // 							tablename
