@@ -20,8 +20,8 @@ extern int validate_number(char number[]) {
 		return LEN_EQUAL_ZERO;
 	}else if (len < 10) {
 		return NUMBER_10;
-	}else if (number[0]!='0'){
-		return NUMBER_FIRST_0;
+	}else if (number[0]!='0' && number[0] != '+'){
+		return NUMBER_FIRST_ERR;
 	}
 	return STR_OK;
 }
