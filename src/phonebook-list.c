@@ -79,7 +79,13 @@ void on_ok_btn1_clicked() {
     int nameErr     = validate_name(name);
     int numberErr   = validate_number(number);
 
-    if(nameErr == STR_OK && numberErr == STR_OK) 
+    if(is_exists_in_db("name", name))   //tên mới trùng với 1 tên khác trong csdl
+    {
+        gtk_label_set_text (GTK_LABEL(validateLabel), (const gchar* ) "Tên đã tồn tại");
+    }else if(is_exists_in_db("number", number)) //số mới trùng với 1 số khác trong csdl
+    {
+        gtk_label_set_text (GTK_LABEL(validateLabel), (const gchar* ) "Số điện thoại đã tồn tại");
+    }else if(nameErr == STR_OK && numberErr == STR_OK) 
     {
         int success = 0;
         success = insert_db(name, number,builder);
