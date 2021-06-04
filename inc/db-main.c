@@ -158,7 +158,7 @@ int callback2(void *liststore, int argc, char **argv, char **azColName)
 		            0, argv[1],
 		            1, argv[2],
 		            -1);	    
-		    // printf("Tên: %s\nSố điện thoại: %s\nDone!\n\n", argv[1],argv[2]);  ****Thêm dòng này là bị lỗi
+		    // printf("Tên: %s\nSố điện thoại: %s\nDone!\n\n", argv[1],argv[2]);  //****Thêm dòng này là bị lỗi
 	    }
     }
 
@@ -199,8 +199,8 @@ int callback(void *liststore, int argc, char **argv, char **azColName)
 
     gtk_list_store_append (liststore, &iter);       
     gtk_list_store_set (liststore, &iter,
-            0, argv[1],
-            1, argv[2],
+            0, argv[0],
+            1, argv[1],
             -1);
     printf("Tên: %s\nSố điện thoại: %s\n\n", argv[1],argv[2]);
 	return 0;
