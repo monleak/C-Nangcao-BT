@@ -131,15 +131,15 @@ extern int is_exists_in_db(char *colName, char *name) {
 
 int callback2(void *liststore, int argc, char **argv, char **azColName) 
 {
-    if(KiemTraXau(argv[2]) == 1 && 
-    	validate_name(argv[1]) == STR_OK && validate_number(argv[2]) == STR_OK && 
-    	!is_exists_in_db("name", argv[1]) && !is_exists_in_db("number", argv[2]))
+    if(KiemTraXau(argv[1]) == 1 && 
+    	validate_name(argv[0]) == STR_OK && validate_number(argv[1]) == STR_OK && 
+    	!is_exists_in_db("name", argv[0]) && !is_exists_in_db("number", argv[1]))
     {
     	// Chèn dữ liệu mới vào file phonebook_data.db
 	    char sql[100]="INSERT INTO Phonebook(name,number) VALUES('";
-		strcat(sql, argv[1]);
+		strcat(sql, argv[0]);
 		strcat(sql, "', '");
-		strcat(sql, argv[2]);
+		strcat(sql, argv[1]);
 		strcat(sql,"');\0");
 		char *err_msg = 0;
 		int rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
@@ -155,8 +155,8 @@ int callback2(void *liststore, int argc, char **argv, char **azColName)
 
 		    gtk_list_store_append (liststore, &iter);       
 		    gtk_list_store_set (liststore, &iter,
-		            0, argv[1],
-		            1, argv[2],
+		            0, argv[0],
+		            1, argv[1],
 		            -1);	    
 		    // printf("Tên: %s\nSố điện thoại: %s\nDone!\n\n", argv[1],argv[2]);  //****Thêm dòng này là bị lỗi
 	    }
