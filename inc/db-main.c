@@ -202,7 +202,7 @@ int callback(void *liststore, int argc, char **argv, char **azColName)
             0, argv[0],
             1, argv[1],
             -1);
-    printf("Tên: %s\nSố điện thoại: %s\n\n", argv[1],argv[2]);
+    printf("Tên: %s\nSố điện thoại: %s\n\n", argv[0],argv[1]);
 	return 0;
 }
 extern void push_to_GUI(GtkBuilder *builder)
